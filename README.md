@@ -2,17 +2,12 @@
 
 A high-fidelity, interactive 3D Solar System simulation built with **React**, **Three.js**, and **Tailwind CSS**. Experience the cosmos with cinematic rendering, advanced procedural textures, and real-time planetary telemetry.
 
-![Project Preview](https://raw.githubusercontent.com/Ashborn-047/Solar-Core-Explorer/main/preview.png) *(Placeholder for your preview image)*
-
-## 🛠️ Tech Stack
-
-- **Framework**: [React 18](https://reactjs.org/)
-- **3D Library**: [Three.js](https://threejs.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **AI/Voice**: [Google Gemini Pro Vision (TTS)](https://ai.google.dev/)
-- **CI/CD**: [GitHub Actions](https://github.com/features/actions)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+![Gemini AI](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white)
 
 ## ✨ Key Features
 
