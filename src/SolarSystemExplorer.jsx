@@ -222,7 +222,7 @@ export default function SolarSystemExplorer() {
       setIsSpeaking(false);
       return;
     }
-    const apiKey = ""; // USER: Insert Gemini API Key here
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY || "";
     const text = `Analyzing ${selectedPlanet}. Classification: ${PLANET_INFO[selectedPlanet].class}. ${PLANET_INFO[selectedPlanet].description}`;
     try {
       setIsSpeaking(true);

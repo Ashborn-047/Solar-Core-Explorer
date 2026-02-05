@@ -43,10 +43,11 @@ A high-fidelity, interactive 3D Solar System simulation built with **React**, **
 ## 🛠️ Configuration
 
 ### Neural Voice (Optional)
-To enable the robotic voice analysis, add your Gemini API Key in `src/SolarSystemExplorer.jsx`:
-```javascript
-const apiKey = "YOUR_GEMINI_API_KEY";
+To enable the robotic voice analysis, create a `.env` file in the root directory and add your key:
+```env
+VITE_GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 ```
+*(Note: Use `.env.example` as a template. The `.env` file is git-ignored for safety.)*
 
 ## 📜 Deployment
 
