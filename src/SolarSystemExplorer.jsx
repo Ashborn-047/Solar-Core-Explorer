@@ -1,0 +1,550 @@
+import React, { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+// Import high-fidelity planet assets
+import { createSun } from './planets/Sun';
+import { createMercury } from './planets/Mercury';
+import { createVenus } from './planets/Venus';
+import { createEarth } from './planets/Earth';
+import { createMars } from './planets/Mars';
+import { createJupiter } from './planets/Jupiter';
+import { createSaturn } from './planets/Saturn';
+import { createUranus } from './planets/Uranus';
+import { createNeptune } from './planets/Neptune';
+import { createPluto } from './planets/Pluto';
+
+/**
+ * SOLAR SYSTEM EXPLORER - DEEP ANALYTICS EDITION (V4.1)
+ * * Features:
+ * 1. Deep Technical HUD: Exhaustive data on composition, orbits, and planetary physics.
+ * 2. Cinematic Framing: Split-screen focus with planet-to-left offset.
+ * 3. Neural Charon Voice: Robotic TTS analysis.
+ * 4. High-Resolution Raycasting: Precise interaction with all orbital bodies.
+ * 5. Advanced Asset Integration: Using procedural and NASA-sourced planetary models.
+ */
+
+const PLANET_INFO = {
+  Sun: {
+    description: "The Sun is a G-type main-sequence star (G2V) based on its spectral class. It is a nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core. The Sun currently fuses approximately 600 million tons of hydrogen into helium every second, converting 4 million tons of matter into energy. This energy, which can take between 10,000 and 170,000 years to escape the core, is the source of all life and weather on Earth. The solar atmosphere consists of the photosphere, chromosphere, and the transition region, leading to the corona, which paradoxically is much hotter than the surface.",
+    stats: {
+      "Surface Gravity": "274.0 m/s²",
+      "Escape Velocity": "617.7 km/s",
+      "Luminosity": "3.828 × 10²⁶ W",
+      "Core Temp": "15.7 Million K",
+      "Spectral Type": "G2V",
+      "Rotation Period": "25.05 Days"
+    },
+    composition: { Hydrogen: "73.46%", Helium: "24.85%", Oxygen: "0.77%", Carbon: "0.29%" },
+    color: '#FFCC00',
+    mechanics: { eccentricity: "N/A", inclination: "7.25° to Ecliptic", velocity: "220 km/s (Galactic)" },
+    class: "G2V Star"
+  },
+  Mercury: {
+    description: "Mercury is the smallest planet in the Solar System and the closest to the Sun. Due to its lack of a substantial atmosphere to retain heat, it has the most extreme temperature variations in the solar system, ranging from 100 K at night to 700 K during the day. Its surface is heavily cratered and similar in appearance to the Moon, indicating that it has been geologically inactive for billions of years. Mercury is tidally locked with the Sun in a 3:2 spin-orbit resonance, meaning it rotates three times for every two orbits around the Sun.",
+    stats: {
+      "Surface Gravity": "3.7 m/s²",
+      "Surface Pressure": "10⁻¹⁴ bar",
+      "Magnetic Field": "1.1% of Earth's",
+      "Mean Radius": "2,439.7 km",
+      "Density": "5.427 g/cm³",
+      "Axial Tilt": "0.034°"
+    },
+    composition: { Iron: "70% (Core)", Silicates: "30% (Crust)", Oxygen: "42%", Sodium: "29%" },
+    color: '#A8A8A8',
+    mechanics: { eccentricity: "0.2056", inclination: "7.005°", velocity: "47.36 km/s" },
+    class: "Terrestrial Planet"
+  },
+  Venus: {
+    description: "Venus is often described as Earth's sister planet due to their similar size and mass, but it is radically different in every other way. It has the densest atmosphere of the four terrestrial planets, consisting of more than 96% carbon dioxide. The atmospheric pressure at the surface is 92 times that of Earth. Venus is shrouded by an opaque layer of highly reflective clouds of sulfuric acid, preventing its surface from being seen from space in visible light. It may have had water oceans in the past, but these would have vaporized as the temperature rose due to a runaway greenhouse effect.",
+    stats: {
+      "Surface Gravity": "8.87 m/s²",
+      "Surface Pressure": "92 bar",
+      "Surface Temp": "464°C (Mean)",
+      "Mean Radius": "6,051.8 km",
+      "Density": "5.243 g/cm³",
+      "Axial Tilt": "177.3° (Retrograde)"
+    },
+    composition: { "Carbon Dioxide": "96.5%", Nitrogen: "3.5%", "Sulfur Dioxide": "0.015%", Argon: "0.007%" },
+    color: '#E3BB76',
+    mechanics: { eccentricity: "0.0067", inclination: "3.394°", velocity: "35.02 km/s" },
+    class: "Terrestrial Planet"
+  },
+  Earth: {
+    description: "Earth is the third planet from the Sun and the only astronomical object known to harbor life. This is enabled by Earth being an ocean world; the only one in the Solar System known to harbor liquid surface water. Earth's lithosphere is divided into several rigid tectonic plates that migrate across the surface over periods of many millions of years. Earth's atmosphere consists mostly of nitrogen and oxygen, and it has a powerful magnetic field generated by its active iron core, which shields the planet from damaging solar radiation.",
+    stats: {
+      "Surface Gravity": "9.806 m/s²",
+      "Surface Pressure": "1.013 bar",
+      "Albedo": "0.306",
+      "Mean Radius": "6,371.0 km",
+      "Density": "5.514 g/cm³",
+      "Axial Tilt": "23.44°"
+    },
+    composition: { Nitrogen: "78.08%", Oxygen: "20.95%", Argon: "0.93%", "Carbon Dioxide": "0.04%" },
+    color: '#2271B3',
+    mechanics: { eccentricity: "0.0167", inclination: "0.000° (Ref)", velocity: "29.78 km/s" },
+    class: "Terrestrial Planet"
+  },
+  Mars: {
+    description: "Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent both of the impact craters of the Moon and the valleys, deserts, and polar ice caps of Earth. It is home to Olympus Mons, the largest volcano and highest known mountain on any planet in the Solar System, and Valles Marineris, one of the largest canyons. The smooth Borealis basin in the Northern Hemisphere covers 40% of the planet and may be a giant impact feature. Mars has two moons, Phobos and Deimos, which are small and irregularly shaped.",
+    stats: {
+      "Surface Gravity": "3.721 m/s²",
+      "Surface Pressure": "0.006 bar",
+      "Day Length": "24h 37m",
+      "Mean Radius": "3,389.5 km",
+      "Density": "3.933 g/cm³",
+      "Axial Tilt": "25.19°"
+    },
+    composition: { "Carbon Dioxide": "95.3%", Nitrogen: "2.7%", Argon: "1.6%", Oxygen: "0.13%" },
+    color: '#E27B58',
+    mechanics: { eccentricity: "0.0934", inclination: "1.850°", velocity: "24.07 km/s" },
+    class: "Terrestrial Planet"
+  },
+  Jupiter: {
+    description: "Jupiter is the largest planet in the Solar System, a gas giant with a mass more than two and a half times that of all the other planets in the Solar System combined. It is primarily composed of hydrogen, but helium constitutes one-fourth of its mass and one-tenth of its volume. It probably has a rocky core of heavier elements, but like the other giant planets, Jupiter lacks a well-defined solid surface. The Great Red Spot, a giant storm known to have existed since at least the 17th century, is visible through even small telescopes.",
+    stats: {
+      "Surface Gravity": "24.79 m/s²",
+      "Surface Pressure": ">100 bar",
+      "Magnetic Moment": "18,000x Earth",
+      "Mean Radius": "69,911 km",
+      "Density": "1.326 g/cm³",
+      "Axial Tilt": "3.13°"
+    },
+    composition: { Hydrogen: "89.8%", Helium: "10.1%", Methane: "0.3%", Ammonia: "0.02%" },
+    color: '#D39C7E',
+    mechanics: { eccentricity: "0.0489", inclination: "1.303°", velocity: "13.07 km/s" },
+    class: "Gas Giant"
+  },
+  Saturn: {
+    description: "Saturn is a gas giant with an average radius of about nine times that of Earth. Although it has only one-eighth the average density of Earth, with its larger volume, Saturn is over 95 times more massive. Saturn's interior is most likely composed of a core of iron–nickel and rock (silicon and oxygen compounds). This core is surrounded by a deep layer of metallic hydrogen, an intermediate layer of liquid hydrogen and liquid helium, and finally, a gaseous outer layer.",
+    stats: {
+      "Surface Gravity": "10.44 m/s²",
+      "Wind Speed": "1,800 km/h",
+      "Ring Count": "7 Main Groups",
+      "Mean Radius": "58,232 km",
+      "Density": "0.687 g/cm³",
+      "Axial Tilt": "26.73°"
+    },
+    composition: { Hydrogen: "96.3%", Helium: "3.2%", Methane: "0.45%", Ammonia: "0.01%" },
+    color: '#C5AB6E',
+    mechanics: { eccentricity: "0.0565", inclination: "2.485°", velocity: "9.68 km/s" },
+    class: "Gas Giant"
+  },
+  Uranus: {
+    description: "Uranus is an ice giant, meaning it has a higher proportion of 'ices' such as water, ammonia, and methane, along with traces of hydrocarbons. It has the coldest planetary atmosphere in the Solar System, with a minimum temperature of 49 K. It has a complex, layered cloud structure; water is thought to make up the lowest clouds, and methane the uppermost layer. The interior of Uranus is mainly composed of ices and rock.",
+    stats: {
+      "Surface Gravity": "8.69 m/s²",
+      "Obliquity": "97.77° (Sideways)",
+      "Magnetic Tilt": "59°",
+      "Mean Radius": "25,362 km",
+      "Density": "1.270 g/cm³",
+      "Sidereal Orbit": "84.02 yrs"
+    },
+    composition: { Hydrogen: "82.5%", Helium: "15.2%", Methane: "2.3%", Deuterium: "0.01%" },
+    color: '#BBE1E4',
+    mechanics: { eccentricity: "0.0472", inclination: "0.772°", velocity: "6.80 km/s" },
+    class: "Ice Giant"
+  },
+  Neptune: {
+    description: "Neptune is the most distant known solar planet and the fourth-largest planet by diameter. It is 17 times the mass of Earth and slightly more massive than its near-twin Uranus. Neptune is denser and physically smaller than Uranus because its greater mass causes more gravitational compression of its atmosphere. The planet orbits the Sun once every 164.8 years at an average distance of 30.1 AU. Neptune is not visible to the unaided eye and is the only planet in the Solar System found by mathematical prediction rather than by empirical observation.",
+    stats: {
+      "Surface Gravity": "11.15 m/s²",
+      "Wind Speed": "2,100 km/h",
+      "Heat Flux": "2.6x Absorbed",
+      "Mean Radius": "24,622 km",
+      "Density": "1.638 g/cm³",
+      "Axial Tilt": "28.32°"
+    },
+    composition: { Hydrogen: "80%", Helium: "19%", Methane: "1.5%", Ethane: "0.0001%" },
+    color: '#6081FF',
+    mechanics: { eccentricity: "0.0113", inclination: "1.767°", velocity: "5.43 km/s" },
+    class: "Ice Giant"
+  },
+  Pluto: {
+    description: "Pluto is a dwarf planet in the Kuiper belt, a ring of bodies beyond the orbit of Neptune. It was the first and largest Kuiper belt object to be discovered. Pluto is the ninth-largest and tenth-most-massive known object directly orbiting the Sun. It is the largest known trans-Neptunian object by volume but is less massive than Eris. Like other Kuiper belt objects, Pluto is primarily made of ice and rock and is relatively small—one-sixth the mass of the Moon and one-third its volume.",
+    stats: {
+      "Surface Gravity": "0.62 m/s²",
+      "Surface Pressure": "10 μbar",
+      "Atmosphere": "Nitrogen / Methane",
+      "Mean Radius": "1,188.3 km",
+      "Density": "1.854 g/cm³",
+      "Axial Tilt": "122.53°"
+    },
+    composition: { "Nitrogen Ice": "98%", Methane: "0.5%", "Carbon Monoxide": "0.5%", Water: "Traces" },
+    color: '#968570',
+    mechanics: { eccentricity: "0.2488", inclination: "17.16°", velocity: "4.74 km/s" },
+    class: "Dwarf Planet"
+  }
+};
+
+const PLANET_CONFIG = [
+  { name: 'Sun', dist: 0, size: 8, speed: 0 },
+  { name: 'Mercury', dist: 28, size: 1.2, speed: 0.9 },
+  { name: 'Venus', dist: 45, size: 2.1, speed: 0.7 },
+  { name: 'Earth', dist: 65, size: 2.2, speed: 0.55 },
+  { name: 'Mars', dist: 85, size: 1.8, speed: 0.45 },
+  { name: 'Jupiter', dist: 120, size: 5.5, speed: 0.25 },
+  { name: 'Saturn', dist: 160, size: 4.8, speed: 0.18 },
+  { name: 'Uranus', dist: 200, size: 3.2, speed: 0.12 },
+  { name: 'Neptune', dist: 235, size: 3.1, speed: 0.09 },
+  { name: 'Pluto', dist: 265, size: 0.8, speed: 0.06 }
+];
+
+export default function SolarSystemExplorer() {
+  const containerRef = useRef(null);
+  const [selectedPlanet, setSelectedPlanet] = useState(null);
+  const [hoveredPlanet, setHoveredPlanet] = useState(null);
+  const [typewriter, setTypewriter] = useState("");
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const audioRef = useRef(null);
+  const planetObjects = useRef([]);
+  const stateRef = useRef({ selected: null });
+
+  useEffect(() => { stateRef.current.selected = selectedPlanet; }, [selectedPlanet]);
+
+  // Deep Data Typewriter logic
+  useEffect(() => {
+    if (!selectedPlanet) { setTypewriter(""); return; }
+    const text = PLANET_INFO[selectedPlanet].description;
+    let i = 0;
+    const interval = setInterval(() => {
+      setTypewriter(text.slice(0, i));
+      i++;
+      if (i > text.length) clearInterval(interval);
+    }, 15);
+    return () => clearInterval(interval);
+  }, [selectedPlanet]);
+
+  // Neural Voice Interface
+  const handleSpeak = async () => {
+    if (isSpeaking) {
+      if (audioRef.current) audioRef.current.pause();
+      setIsSpeaking(false);
+      return;
+    }
+    const apiKey = ""; // USER: Insert Gemini API Key here
+    const text = `Analyzing ${selectedPlanet}. Classification: ${PLANET_INFO[selectedPlanet].class}. ${PLANET_INFO[selectedPlanet].description}`;
+    try {
+      setIsSpeaking(true);
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `In a clinical, highly-detailed artificial intelligence voice: ${text}` }] }],
+          generationConfig: {
+            responseModalities: ["AUDIO"],
+            speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: "Charon" } } }
+          }
+        })
+      });
+      const data = await res.json();
+      const pcmBase64 = data.candidates[0].content.parts[0].inlineData.data;
+
+      const pcmToWav = (base64, rate) => {
+        const pcm = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+        const wav = new ArrayBuffer(44 + pcm.length);
+        const view = new DataView(wav);
+        view.setUint32(0, 0x52494646, false); view.setUint32(4, 36 + pcm.length, true);
+        view.setUint32(8, 0x57415645, false); view.setUint32(12, 0x666d7420, false);
+        view.setUint32(16, 16, true); view.setUint16(20, 1, true); view.setUint16(22, 1, true);
+        view.setUint32(24, rate, true); view.setUint32(28, rate * 2, true);
+        view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+        view.setUint32(36, 0x64617461, false); view.setUint32(40, pcm.length, true);
+        new Uint8Array(wav, 44).set(pcm);
+        return new Blob([wav], { type: 'audio/wav' });
+      };
+
+      const audio = new Audio(URL.createObjectURL(pcmToWav(pcmBase64, 24000)));
+      audioRef.current = audio;
+      audio.play();
+      audio.onended = () => setIsSpeaking(false);
+    } catch (e) { setIsSpeaking(false); }
+  };
+
+  useEffect(() => {
+    if (!containerRef.current) return;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color('#010104');
+
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 10000);
+    camera.position.set(300, 250, 500);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    containerRef.current.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 5;
+    controls.maxDistance = 2000;
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.2));
+
+    // Deep Nebula Starfield
+    const starCount = 30000;
+    const starGeom = new THREE.BufferGeometry();
+    const starPos = new Float32Array(starCount * 3);
+    for (let i = 0; i < starCount * 3; i++) starPos[i] = (Math.random() - 0.5) * 6000;
+    starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+    scene.add(new THREE.Points(starGeom, new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.6 })));
+
+    // Asset Map
+    const assetCreators = {
+      Sun: createSun,
+      Mercury: createMercury,
+      Venus: createVenus,
+      Earth: createEarth,
+      Mars: createMars,
+      Jupiter: createJupiter,
+      Saturn: createSaturn,
+      Uranus: createUranus,
+      Neptune: createNeptune,
+      Pluto: createPluto
+    };
+
+    const sunAsset = createSun();
+    scene.add(sunAsset.mesh);
+
+    const groups = [];
+    PLANET_CONFIG.forEach(data => {
+      if (data.name === 'Sun') return;
+
+      // Precise Orbit Paths
+      const orbit = new THREE.Mesh(
+        new THREE.TorusGeometry(data.dist, 0.15, 16, 300),
+        new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.05 })
+      );
+      orbit.rotation.x = Math.PI / 2;
+      scene.add(orbit);
+
+      const orbitGroup = new THREE.Group();
+      const asset = assetCreators[data.name](data.size);
+      asset.mesh.position.x = data.dist;
+      asset.mesh.userData = { ...data };
+
+      orbitGroup.add(asset.mesh);
+      scene.add(orbitGroup);
+
+      groups.push({ orbitGroup, data, asset });
+      planetObjects.current.push(asset.mesh);
+    });
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    const onPointer = (e) => {
+      const cx = e.clientX || (e.touches && e.touches[0].clientX);
+      const cy = e.clientY || (e.touches && e.touches[0].clientY);
+      if (cx === undefined) return;
+
+      mouse.x = (cx / window.innerWidth) * 2 - 1;
+      mouse.y = -(cy / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      // Raycast against all planet asset groups and the sun
+      const hits = raycaster.intersectObjects([...planetObjects.current, sunAsset.mesh], true);
+
+      if (hits.length > 0) {
+        // Find the root object with name in userData
+        let target = hits[0].object;
+        while (target && (!target.userData || !target.userData.name)) {
+          target = target.parent;
+        }
+
+        if (target && target.userData.name) {
+          const name = target.userData.name;
+          setHoveredPlanet(name);
+          document.body.style.cursor = 'crosshair';
+          if (e.type === 'mousedown') setSelectedPlanet(name);
+        }
+      } else {
+        setHoveredPlanet(null);
+        document.body.style.cursor = 'default';
+        if (e.type === 'mousedown') setSelectedPlanet(null);
+      }
+    };
+
+    window.addEventListener('mousedown', onPointer);
+    window.addEventListener('mousemove', onPointer);
+
+    const clock = new THREE.Clock();
+    const animate = () => {
+      const time = clock.getElapsedTime();
+      const selected = stateRef.current.selected;
+
+      sunAsset.update(time);
+
+      groups.forEach(item => {
+        if (selected !== item.data.name) {
+          item.orbitGroup.rotation.y = time * item.data.speed * 0.12;
+        }
+        item.asset.update(time);
+      });
+
+      if (selected) {
+        const targetAsset = selected === 'Sun' ? sunAsset : groups.find(g => g.data.name === selected).asset;
+        const worldPos = new THREE.Vector3();
+        targetAsset.mesh.getWorldPosition(worldPos);
+
+        const size = selected === 'Sun' ? 15 : targetAsset.mesh.userData.size || 5;
+
+        // Split-Screen Target Framing
+        const offset = new THREE.Vector3(size * 4, size * 1.5, size * 8);
+        const lookAtOffset = new THREE.Vector3(size * 4, 0, 0);
+
+        camera.position.lerp(worldPos.clone().add(offset), 0.05);
+        controls.target.lerp(worldPos.clone().add(lookAtOffset), 0.05);
+      }
+
+      controls.update();
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    };
+    animate();
+
+    const handleResize = () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('mousedown', onPointer);
+      window.removeEventListener('mousemove', onPointer);
+      renderer.dispose();
+      if (containerRef.current) containerRef.current.innerHTML = '';
+    };
+  }, []);
+
+  return (
+    <div className="w-full h-screen bg-[#010104] text-white font-sans overflow-hidden select-none">
+      <div ref={containerRef} className="w-full h-full" />
+
+      {/* Cinematic HUD Overlays */}
+      <div className="absolute inset-0 pointer-events-none border-[1px] border-white/[0.03]" />
+      <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_200px_rgba(0,0,0,1)]" />
+
+      {/* Primary Header */}
+      {!selectedPlanet && (
+        <div className="absolute top-16 left-16 pointer-events-none">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-ping" />
+            <span className="text-[11px] font-mono tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
+          </div>
+          <h1 className="text-7xl md:text-9xl font-black italic tracking-tighter opacity-5 uppercase leading-none">Astro_Metric</h1>
+          <p className="text-[10px] font-mono tracking-[0.4em] text-white/20 mt-6">SCROLL: DEPTH_ZOOM // CLICK: SPECTRAL_LOCK</p>
+        </div>
+      )}
+
+      {/* Interaction Cursor Tag */}
+      {hoveredPlanet && !selectedPlanet && (
+        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 px-12 py-4 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-full animate-pulse z-20 pointer-events-none">
+          <span className="text-[11px] font-black tracking-[0.6em] text-blue-400 uppercase">Tracking: {hoveredPlanet}</span>
+        </div>
+      )}
+
+      {/* DEEP ANALYTICS SPLIT-SCREEN PANEL */}
+      {selectedPlanet && (
+        <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
+          <div className="w-full md:w-[42%] h-full bg-black/60 backdrop-blur-[60px] border-l border-white/10 p-12 md:p-20 flex flex-col justify-start pointer-events-auto shadow-[-150px_0_200px_rgba(0,0,0,0.9)] border-r-[20px] border-r-blue-600 animate-in slide-in-from-right-full duration-700 overflow-y-auto custom-scrollbar">
+
+            <header className="mb-16 pt-10">
+              <div className="flex items-center gap-5 mb-8">
+                <div className="w-20 h-[1px] bg-blue-500" />
+                <span className="text-[11px] font-black tracking-[1em] text-blue-500 uppercase">Core_Telemetry</span>
+              </div>
+              <h2 className="text-8xl md:text-[10rem] font-black italic tracking-tighter leading-none" style={{ color: PLANET_INFO[selectedPlanet].color }}>
+                {selectedPlanet}
+              </h2>
+              <div className="flex items-center gap-4 mt-8">
+                <span className="px-4 py-1 border border-blue-500/30 text-blue-400 font-mono text-[10px] uppercase tracking-widest rounded-full">{PLANET_INFO[selectedPlanet].class}</span>
+                <p className="text-white/20 font-mono text-[10px] uppercase tracking-[0.4em]">Status: Signal_Lock</p>
+              </div>
+            </header>
+
+            {/* Scientific Breakdown Section */}
+            <div className="mb-16">
+              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-6 border-b border-white/5 pb-2">Technical Summary</h3>
+              <p className="text-xl md:text-2xl font-mono leading-relaxed text-gray-300">
+                {typewriter}<span className="inline-block w-4 h-8 bg-blue-500 ml-2 animate-pulse" />
+              </p>
+            </div>
+
+            {/* Detailed Physics Grid */}
+            <div className="mb-16">
+              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-8 border-b border-white/5 pb-2">Planetary Physics</h3>
+              <div className="grid grid-cols-2 gap-6">
+                {Object.entries(PLANET_INFO[selectedPlanet].stats).map(([k, v]) => (
+                  <div key={k} className="bg-white/[0.02] p-8 rounded-[40px] border border-white/5 group hover:border-blue-500/40 transition-all">
+                    <p className="text-[9px] uppercase tracking-[0.4em] text-gray-600 mb-2 font-bold">{k}</p>
+                    <p className="text-2xl font-black">{v}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Compositional Analysis */}
+            <div className="mb-16">
+              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-8 border-b border-white/5 pb-2">Chemical Composition</h3>
+              <div className="space-y-4">
+                {Object.entries(PLANET_INFO[selectedPlanet].composition).map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between">
+                    <span className="text-xs font-mono text-white/60 uppercase tracking-widest">{k}</span>
+                    <div className="flex-1 mx-6 h-[1px] bg-white/10" />
+                    <span className="text-sm font-black text-blue-400">{v}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Orbital Vectors */}
+            <div className="mb-16">
+              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-8 border-b border-white/5 pb-2">Orbital Dynamics</h3>
+              <div className="grid grid-cols-3 gap-4">
+                {Object.entries(PLANET_INFO[selectedPlanet].mechanics).map(([k, v]) => (
+                  <div key={k} className="text-center">
+                    <p className="text-[8px] text-gray-600 uppercase mb-1">{k}</p>
+                    <p className="text-[11px] font-mono font-bold text-white/80">{v}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Action Interface */}
+            <div className="flex gap-4 mt-auto pt-10">
+              <button
+                onClick={handleSpeak}
+                className={`flex-1 py-8 rounded-[50px] font-black uppercase text-[12px] tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${isSpeaking ? 'bg-red-600 shadow-2xl shadow-red-600/40' : 'bg-blue-600 hover:bg-blue-500'}`}
+              >
+                {isSpeaking ? 'Kill_Audio' : 'Neural_Voice_Sync'}
+              </button>
+              <button
+                onClick={() => setSelectedPlanet(null)}
+                className="px-12 py-8 bg-white/[0.04] hover:bg-white/10 rounded-[50px] border border-white/10 transition-all uppercase text-[11px] font-black tracking-[0.4em]"
+              >
+                Close
+              </button>
+            </div>
+
+            <p className="text-[9px] font-mono text-white/5 mt-16 text-center tracking-[1.5em] uppercase">Security_Protocol_Active // NASA_SOURCE_2024</p>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(59, 130, 246, 0.2); border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(59, 130, 246, 0.5); }
+      `}</style>
+    </div>
+  );
+}
