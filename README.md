@@ -1,21 +1,115 @@
 # Solar Core Explorer 🌌
 
-A high-fidelity, interactive 3D Solar System simulation built with **React**, **Three.js**, and **Tailwind CSS**. Experience the cosmos with cinematic rendering, advanced procedural textures, and real-time planetary telemetry.
+A high-fidelity, interactive 3D Solar System simulation built with **React**, **Three.js**, and **Tailwind CSS**. Experience the cosmos with cinematic rendering, NASA-sourced textures, procedural planet generation, and real-time planetary telemetry.
 
 ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
 ![Three.js](https://img.shields.io/badge/Three.js-black?style=for-the-badge&logo=three.js&logoColor=white)
 ![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
 ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
-![Gemini AI](https://img.shields.io/badge/Gemini_AI-4285F4?style=for-the-badge&logo=google-gemini&logoColor=white)
 
 ## ✨ Key Features
 
-- **High-Fidelity Planetary Models**: Each celestial body features custom shaders and procedural textures (e.g., Jupiter's dynamic flow engine, Saturn's 4K sharp rings).
-- **Cinematic HUD**: A sofisticated telemetry overlay providing real-time technical data on planetary composition, physics, and orbital dynamics.
-- **Neural Voice Integration**: Automated AI analysis and audio readouts for planetary data (Gemini API supported).
-- **Interactive Exploration**: Precise raycasting for selection, cinematic framing, and smooth orbital navigation.
-- **Modern Tech Stack**: Powered by Vite for ultra-fast performance and Tailwind CSS for a premium, glassmorphic UI.
+- **🌍 Photorealistic Earth**: Real NASA satellite imagery textures sourced from the [Three.js examples repository](https://github.com/mrdoob/three.js/tree/dev/examples/textures/planets), including atmosphere, specular maps, cloud layers, and normal/bump maps
+- **☀️ Procedural Sun**: Custom canvas-generated solar texture with convection cells, granulation patterns, and animated corona glow
+- **🪐 High-Fidelity Planets**: Each celestial body features custom shaders and procedural textures (e.g., Jupiter's dynamic flow engine, Saturn's crystalline rings with Cassini Division)
+- **📊 Cinematic HUD**: Sophisticated telemetry overlay with real-time technical data on planetary composition, physics, and orbital dynamics
+- **🔬 Deep Dive Mode**: Interactive exploration panels with scientific data, mission history, satellite registry, and atmospheric composition
+- **📱 Fully Responsive**: Optimized for mobile, tablet, laptop, and desktop with adaptive layouts and touch-friendly controls
+- **🎙️ Neural Voice Integration**: Automated AI analysis and audio readouts for planetary data (Gemini API supported)
+
+---
+
+## 🛠️ Technical Architecture
+
+### How It's Built
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                     Solar Core Explorer                         │
+├─────────────────────────────────────────────────────────────────┤
+│  React 18          │  Component-based UI & State Management    │
+│  Three.js r167     │  WebGL 3D Rendering Engine                │
+│  Vite 5.4          │  Ultra-fast HMR & Production Bundling     │
+│  Tailwind CSS 3.4  │  Utility-first Responsive Styling         │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Planet Rendering Pipeline
+
+Each planet is built using a modular factory pattern (`createPlanet()`) that returns:
+- **Mesh Group**: Parent container for multi-layer planetary geometry
+- **Update Function**: Per-frame animation and state-reactive rendering
+- **Special Effects**: Atmosphere glow, rings, structural cutaways, and heatmaps
+
+---
+
+## 🌍 Earth: NASA Texture Integration
+
+Earth is rendered using **real NASA/ESA satellite imagery** hosted on the Three.js GitHub repository:
+
+| Texture | Resolution | Source |
+|---------|------------|--------|
+| **Surface Map** | 2048x1024 | `earth_atmos_2048.jpg` - NASA Blue Marble imagery |
+| **Specular Map** | 2048x1024 | `earth_specular_2048.jpg` - Ocean reflectivity data |
+| **Cloud Layer** | 1024x512 | `earth_clouds_1024.png` - Atmospheric cloud cover |
+| **Normal/Bump** | 2048x1024 | `earth_normal_2048.jpg` - Terrain elevation data |
+
+```javascript
+// Texture URLs from Three.js examples (NASA-derived public domain imagery)
+const TEXTURE_URLS = {
+  map: "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg",
+  specular: "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_specular_2048.jpg",
+  clouds: "https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_clouds_1024.png"
+};
+```
+
+The Earth renderer also includes:
+- **Phong Material Lighting**: Realistic specular highlights on ocean surfaces
+- **Multi-layer Atmosphere**: Inner glow (rim light) + outer atmospheric haze
+- **Animated Cloud Layer**: Separate rotating mesh with transparency blending
+- **Structural Cutaway Mode**: Mantle and core layers for educational visualization
+
+---
+
+## ☀️ Sun: Procedural Generation
+
+The Sun uses a fully **procedural canvas-based texture** instead of static images:
+
+```javascript
+// Canvas-generated solar texture (2048x1024)
+1. Deep Magma Base       - Gradient from dark poles (#220500) to bright equator (#ff5500)
+2. Convection Cells      - 3500+ radial gradients simulating granulation
+3. Fine Grain Noise      - 50000+ pixel noise overlay for surface detail
+4. Animated Corona       - Sprite-based halo with pulsing opacity
+```
+
+### Why Procedural?
+- **No external dependencies**: Works offline, no CDN failures
+- **Dynamic variation**: Each page load generates unique surface patterns
+- **NASA-accurate colors**: Based on SDO/AIA solar imaging wavelengths
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── planets/              # Planet factory modules
+│   ├── Earth.jsx         # NASA-textured with atmosphere layers
+│   ├── Sun.jsx           # Procedural solar texture engine
+│   ├── Mars.jsx          # Olympus Mons heightmap
+│   ├── Jupiter.jsx       # Flow dynamics with Great Red Spot
+│   ├── Saturn.jsx        # Crystalline ring system
+│   └── ...               # Mercury, Venus, Uranus, Neptune, Pluto
+├── components/
+│   ├── overlays/         # Deep Dive panels & HUD layers
+│   └── visuals/          # Spacetime grid, orbital paths
+├── data.js               # Planetary telemetry & mission database
+└── SolarSystemExplorer.jsx  # Main application component
+```
+
+---
 
 ## 🚀 Quick Start
 
@@ -24,38 +118,75 @@ A high-fidelity, interactive 3D Solar System simulation built with **React**, **
 - npm or yarn
 
 ### Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Ashborn-047/Solar-Core-Explorer.git
-   cd Solar-Core-Explorer
-   ```
+```bash
+# Clone the repository
+git clone https://github.com/Ashborn-047/Solar-Core-Explorer.git
+cd Solar-Core-Explorer
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+# Install dependencies
+npm install
 
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
+# Start development server
+npm run dev
+```
+
+### Production Build
+```bash
+npm run build
+```
+
+**Build Output** (optimized chunks):
+| File | Size | Gzip |
+|------|------|------|
+| `vendor-three.js` | 499 kB | 127 kB |
+| `vendor-react.js` | 140 kB | 45 kB |
+| `index.js` | 120 kB | 34 kB |
+| `index.css` | 37 kB | 7 kB |
+
+---
 
 ## 🛠️ Configuration
 
 ### Neural Voice (Optional)
-To enable the robotic voice analysis, create a `.env` file in the root directory and add your key:
+To enable the robotic voice analysis, create a `.env` file:
 ```env
 VITE_GEMINI_API_KEY=YOUR_GEMINI_API_KEY
 ```
-*(Note: Use `.env.example` as a template. The `.env` file is git-ignored for safety.)*
+
+---
 
 ## 📜 Deployment
 
-The project is configured for **GitHub Pages** via GitHub Actions. Any push to the `main` branch will automatically build and deploy the latest version.
+The project is configured for **GitHub Pages** via GitHub Actions. Any push to `main` automatically builds and deploys.
+
+**Live Demo**: [https://ashborn-047.github.io/Solar-Core-Explorer/](https://ashborn-047.github.io/Solar-Core-Explorer/)
+
+---
+
+## 🎨 Design Philosophy
+
+- **Frontier Ghost Aesthetic**: Glassmorphic UI with subtle blur and transparency
+- **Scientific Accuracy**: Real orbital distances, rotational periods, and composition data
+- **Responsive First**: Touch-friendly on mobile, expansive on desktop
+- **Performance Optimized**: Code splitting, lazy loading, and efficient WebGL rendering
+
+---
+
+## 📚 Data Sources & Credits
+
+| Resource | Source | License |
+|----------|--------|---------|
+| Earth Textures | [Three.js Examples](https://github.com/mrdoob/three.js) (NASA/Blue Marble) | Public Domain |
+| Planetary Data | NASA Planetary Fact Sheets | Public Domain |
+| Mission Database | NASA Mission Archives | Public Domain |
+| Icons | [Lucide React](https://lucide.dev/) | MIT |
+
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Feel free to open issues or submit pull requests to enhance the planetary data or graphical fidelity.
+Contributions are welcome! Feel free to open issues or submit pull requests to enhance planetary data, graphical fidelity, or add new celestial bodies.
 
 ---
-*Created with passion for science and technology.*
+
+*Created with passion for science, technology, and the infinite cosmos.* ✨
