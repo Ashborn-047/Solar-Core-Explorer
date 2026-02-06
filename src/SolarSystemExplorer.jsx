@@ -39,6 +39,11 @@ export default function SolarSystemExplorer() {
   const [debugLog, setDebugLog] = useState("Engine: Standby");
   const [pulse, setPulse] = useState(0);
 
+  // UI Consolidation States
+  const [isHUDOpen, setIsHUDOpen] = useState(window.innerWidth > 768);
+  const [isSystemOpen, setIsSystemOpen] = useState(false);
+  const [isImmersive, setIsImmersive] = useState(false);
+
   useEffect(() => {
     stateRef.current = {
       selected: selectedPlanet,
@@ -463,24 +468,60 @@ export default function SolarSystemExplorer() {
 
   return (
     <div style={{ width: '100vw', height: '100vh', backgroundColor: '#050508', position: 'relative', overflow: 'hidden' }} className="font-mono text-cyan-200">
-      {/* --- EMERGENCY DIAGNOSTIC OVERLAY --- */}
-      <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'linear-gradient(90deg, #00ffff, #0055ff)', zIndex: 10001, boxShadow: '0 0 15px #00ffff' }} />
-      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10002, background: 'rgba(0, 0, 0, 0.9)', border: '1px solid #00ffff', padding: '10px 15px', borderRadius: '4px', boxShadow: '0 0 20px rgba(0,255,255,0.2)' }} className="sm:p-5">
-        <div style={{ fontSize: '10px', fontWeight: '900', color: '#00ffff', marginBottom: '4px' }} className="sm:text-xs">ASTRO_METRIC // ENGINE_CORE_REF</div>
-        <div style={{ fontSize: '8px', color: '#fff' }} className="sm:text-[9px]">
-          STATUS: <span style={{ color: '#00ff00' }}>OPTIMAL</span>
-          <span style={{ marginLeft: '10px', opacity: 0.5 }} className="hidden sm:inline">[{"=".repeat(pulse % 5)}{" ".repeat(5 - (pulse % 5))}]</span>
+      {/* IMMERSIVE MODE TOGGLE */}
+      <button
+        onClick={() => setIsImmersive(!isImmersive)}
+        className="absolute top-4 right-4 z-[10003] p-2 bg-black/60 border border-white/20 rounded-full hover:bg-white/10 transition-all text-white/50 hover:text-white"
+        title="Toggle Immersive Mode"
+      >
+        <div className={`w-3 h-3 rounded-full ${isImmersive ? 'bg-green-500 shadow-[0_0_10px_#00ff00]' : 'border border-white/50'}`} />
+      </button>
+
+      {/* CONSOLIDATED SYSTEM STATUS (TOP LEFT) */}
+      {!isImmersive && (
+        <div className="absolute top-4 left-4 z-50 flex flex-col gap-2">
+          {/* Diagnostic & NASA Panel */}
+          <div className={`transition-all duration-500 overflow-hidden bg-black/80 border border-cyan-500/30 backdrop-blur-xl rounded-lg ${isSystemOpen ? 'max-h-[500px] w-64 p-4 opacity-100' : 'max-h-0 w-64 p-0 opacity-0'}`}>
+            <div className="text-[10px] font-black text-cyan-500 mb-3 border-b border-cyan-500/20 pb-1">SYSTEM_DIAGNOSTICS</div>
+            <div className="space-y-2 text-[9px]">
+              <div className="flex justify-between">
+                <span className="text-white/40 uppercase">Engine_Ref</span>
+                <span className="text-cyan-400 font-bold">OPTIMAL</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white/40 uppercase">Telemetry</span>
+                <span className="text-green-400 font-bold">ACTIVE</span>
+              </div>
+              <button onClick={() => window.location.reload()} className="w-full mt-2 py-1 bg-cyan-500 text-black font-bold uppercase rounded hover:bg-cyan-400 transition-all">Flush_Cache</button>
+            </div>
+
+            <div className="text-[10px] font-black text-cyan-500 mt-4 mb-2 border-b border-cyan-500/20 pb-1 uppercase">NASA_Solar_Live</div>
+            {nasaData ? (
+              <div className="text-[9px] text-cyan-400 opacity-80 leading-relaxed">
+                Flare Class: {nasaData.classType || "Normal"}<br />
+                Peak Time: {nasaData.peakTime ? new Date(nasaData.peakTime).toLocaleTimeString() : "Scanning..."}
+              </div>
+            ) : (
+              <div className="text-[9px] text-cyan-400/50 italic">Syncing with NASA DONKI...</div>
+            )}
+          </div>
+
+          {/* Toggle Button */}
+          <button
+            onClick={() => setIsSystemOpen(!isSystemOpen)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-black/60 border border-cyan-500/30 backdrop-blur-md rounded-full text-[9px] font-black tracking-widest text-cyan-500/80 hover:bg-cyan-500/20 transition-all uppercase"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
+            {isSystemOpen ? "Close_Link" : "System_Status"}
+          </button>
         </div>
-        <div style={{ fontSize: '8px', color: '#00ffff', marginTop: '4px' }} className="sm:text-[9px]">TELEMETRY_LINK: ACTIVE</div>
-        <button onClick={() => window.location.reload()} style={{ marginTop: '8px', background: '#00ffff', color: '#000', border: 'none', padding: '4px 8px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '2px', width: '100%' }} className="sm:text-[10px] sm:mt-3">FORCED_CACHE_FLUSH</button>
-      </div>
-      {/* --- END EMERGENCY OVERLAY --- */}
+      )}
 
       {errorStatus && (
-        <div style={{ position: 'absolute', inset: 0, zIndex: 10000, background: '#1a0000', color: '#ff5555', padding: '100px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <h1 style={{ fontSize: '6rem', fontWeight: '900', letterSpacing: '-0.05em' }}>SYSTEM_CRASH</h1>
-          <p style={{ fontSize: '1.5rem', opacity: 0.8 }}>TERMINAL_MALFUNCTION: <b>{errorStatus}</b></p>
-          <button onClick={() => window.location.reload()} style={{ width: 'fit-content', mt: '40px', padding: '20px 40px', background: '#ff5555', color: 'white', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>REBOOT ENGINE</button>
+        <div className="absolute inset-0 z-[10000] bg-[#1a0000] text-[#ff5555] p-10 sm:p-20 flex flex-col justify-center">
+          <h1 className="text-4xl sm:text-6xl md:text-9xl font-black italic tracking-tighter leading-none">SYSTEM_CRASH</h1>
+          <p className="text-lg sm:text-xl md:text-2xl mt-4 opacity-80 uppercase tracking-widest font-mono">Terminal_Malfunction: <b className="text-white">{errorStatus}</b></p>
+          <button onClick={() => window.location.reload()} className="mt-12 px-8 py-4 bg-[#ff5555] text-white font-black uppercase tracking-[0.3em] hover:bg-red-400 transition-all w-fit">Reboot Engine</button>
         </div>
       )}
 
@@ -500,104 +541,108 @@ export default function SolarSystemExplorer() {
       )}
 
       {/* GLOBAL HUD CONTROLS */}
-      <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 flex flex-col gap-3 sm:gap-4 p-4 sm:p-6 bg-black/80 border border-cyan-500/30 backdrop-blur-xl rounded-xl max-w-[calc(100vw-2rem)]">
+      {!isImmersive && (
+        <>
+          <div className={`absolute bottom-20 right-4 sm:bottom-8 sm:right-8 z-50 flex flex-col gap-3 sm:gap-4 p-4 sm:p-6 bg-black/80 border border-cyan-500/30 backdrop-blur-xl rounded-xl max-w-[calc(100vw-2rem)] transition-all duration-500 ${isHUDOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'}`}>
 
-        <div className="text-[10px] tracking-[0.2em] text-cyan-500/70 mb-2 uppercase font-bold">Terminal Control Unit</div>
+            <div className="text-[10px] tracking-[0.2em] text-cyan-500/70 mb-2 uppercase font-bold">Terminal Control Unit</div>
 
-        {/* Time Scale Controller */}
-        <div className="flex flex-col gap-2">
-          <div className="flex justify-between text-[11px]">
-            <span>TEMPORAL DRIFT</span>
-            <span className="text-white font-bold">{timeScale.toFixed(1)}x</span>
-          </div>
-          <input
-            type="range" min="-10" max="100" step="0.5" value={timeScale}
-            onChange={(e) => setTimeScale(parseFloat(e.target.value))}
-            className="w-32 sm:w-48 appearance-none bg-cyan-900/40 h-1.5 rounded-full overflow-hidden outline-none accent-cyan-400"
-          />
-        </div>
+            {/* Time Scale Controller */}
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between text-[11px]">
+                <span>TEMPORAL DRIFT</span>
+                <span className="text-white font-bold">{timeScale.toFixed(1)}x</span>
+              </div>
+              <input
+                type="range" min="-10" max="100" step="0.5" value={timeScale}
+                onChange={(e) => setTimeScale(parseFloat(e.target.value))}
+                className="w-32 sm:w-48 appearance-none bg-cyan-900/40 h-1.5 rounded-full overflow-hidden outline-none accent-cyan-400"
+              />
+            </div>
 
-        {/* Lens Mode Switcher */}
-        <div className="flex gap-2 pt-2 border-t border-cyan-500/10">
-          {['normal', 'thermal', 'xray', 'retro'].map(mode => (
+            {/* Lens Mode Switcher */}
+            <div className="flex gap-2 pt-2 border-t border-cyan-500/10">
+              {['normal', 'thermal', 'xray', 'retro'].map(mode => (
+                <button
+                  key={mode}
+                  onClick={() => setLensMode(mode)}
+                  className={`px-3 py-1 text-[10px] rounded border transition-all uppercase ${lensMode === mode ? 'bg-cyan-500 text-black border-cyan-400 font-bold' : 'border-cyan-500/30 hover:bg-cyan-500/10'
+                    }`}
+                >
+                  {mode}
+                </button>
+              ))}
+            </div>
+
+            {/* Comparison Lab Toggle */}
             <button
-              key={mode}
-              onClick={() => setLensMode(mode)}
-              className={`px-3 py-1 text-[10px] rounded border transition-all uppercase ${lensMode === mode ? 'bg-cyan-500 text-black border-cyan-400 font-bold' : 'border-cyan-500/30 hover:bg-cyan-500/10'
+              onClick={() => setIsLabMode(!isLabMode)}
+              className={`flex items-center justify-between w-full px-4 py-2 text-[11px] rounded transition-all ${isLabMode ? 'bg-yellow-500/20 border border-yellow-500 text-yellow-500' : 'bg-white/5 border border-white/10 text-white shadow-lg'
                 }`}
             >
-              {mode}
+              <span>COMPARISON LAB</span>
+              <div className={`w-2 h-2 rounded-full ${isLabMode ? 'bg-yellow-500 animate-pulse' : 'bg-white/20'}`} />
             </button>
-          ))}
-        </div>
 
-        {/* Comparison Lab Toggle */}
-        <button
-          onClick={() => setIsLabMode(!isLabMode)}
-          className={`flex items-center justify-between w-full px-4 py-2 text-[11px] rounded transition-all ${isLabMode ? 'bg-yellow-500/20 border border-yellow-500 text-yellow-500' : 'bg-white/5 border border-white/10 text-white shadow-lg'
-            }`}
-        >
-          <span>COMPARISON LAB</span>
-          <div className={`w-2 h-2 rounded-full ${isLabMode ? 'bg-yellow-500 animate-pulse' : 'bg-white/20'}`} />
-        </button>
+            {/* New Toggles */}
+            <div className="flex gap-2">
+              <button
+                onClick={() => setShowMissions(!showMissions)}
+                className={`flex-1 px-3 py-2 text-[10px] rounded border transition-all ${showMissions ? 'bg-green-500/20 border-green-500 text-green-400' : 'border-white/10 text-white'
+                  }`}
+              >
+                MISSIONS
+              </button>
+              <button
+                onClick={() => setAudioEnabled(!audioEnabled)}
+                className={`flex-1 px-3 py-2 text-[10px] rounded border transition-all ${audioEnabled ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'border-white/10 text-white'
+                  }`}
+              >
+                AUDIO: {audioEnabled ? 'ON' : 'OFF'}
+              </button>
+            </div>
+          </div>
 
-        {/* New Toggles */}
-        <div className="flex gap-2">
-          <button
-            onClick={() => setShowMissions(!showMissions)}
-            className={`flex-1 px-3 py-2 text-[10px] rounded border transition-all ${showMissions ? 'bg-green-500/20 border-green-500 text-green-400' : 'border-white/10 text-white'
-              }`}
-          >
-            MISSIONS
-          </button>
-          <button
-            onClick={() => setAudioEnabled(!audioEnabled)}
-            className={`flex-1 px-3 py-2 text-[10px] rounded border transition-all ${audioEnabled ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'border-white/10 text-white'
-              }`}
-          >
-            AUDIO: {audioEnabled ? 'ON' : 'OFF'}
-          </button>
-        </div>
-      </div>
+          {/* HUD Toggle FAB (Mobile Only) */}
+          <div className="absolute bottom-4 right-4 z-[60] sm:hidden">
+            <button
+              onClick={() => setIsHUDOpen(!isHUDOpen)}
+              className={`w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 border shadow-2xl ${isHUDOpen ? 'bg-red-500/20 border-red-500 rotate-45' : 'bg-cyan-500/20 border-cyan-500'}`}
+            >
+              <div className={`w-6 h-0.5 bg-current absolute transition-all ${isHUDOpen ? 'translate-y-0' : '-translate-y-1'}`} />
+              <div className={`w-6 h-0.5 bg-current absolute transition-all ${isHUDOpen ? 'hidden' : 'translate-y-1'}`} />
+              <div className={`w-6 h-0.5 bg-current absolute transition-all ${isHUDOpen ? 'opacity-0' : 'opacity-100'}`} />
+            </button>
+          </div>
+        </>
+      )}
 
       {/* Lab Mode Overlay */}
-      {isLabMode && (
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none">
-          <div className="w-[300px] h-[300px] border-2 border-yellow-500/50 rounded-full animate-ping opacity-20" />
-          <div className="absolute top-full text-yellow-500 text-[10px] mt-4 text-center w-full uppercase tracking-widest font-bold">
-            Laboratory Scale Calibration Active
+      {isLabMode && !isImmersive && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 pointer-events-none px-4">
+          <div className="w-[200px] h-[200px] sm:w-[300px] sm:h-[300px] border-2 border-yellow-500/50 rounded-full animate-ping opacity-20" />
+          <div className="absolute top-full text-yellow-500 text-[8px] sm:text-[10px] mt-4 text-center w-full uppercase tracking-[0.2em] sm:tracking-widest font-bold">
+            Laboratory Scale Calibration
           </div>
         </div>
       )}
 
       {/* Cinematic HUD Overlays */}
-      <div className="absolute inset-0 pointer-events-none border-[1px] border-white/[0.03]" />
+      {!isImmersive && (
+        <div className="absolute inset-0 pointer-events-none border-[1px] border-white/[0.03]" />
+      )}
 
-      {/* Top Left: NASA Live Feed */}
-      <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-50 p-3 sm:p-4 bg-black/40 border-l-2 border-cyan-500 backdrop-blur-md max-w-[200px] sm:max-w-none">
-        <div className="text-[8px] sm:text-[10px] text-cyan-500 font-bold mb-1 uppercase tracking-tighter">NASA DONKI SEC_OFFICE</div>
-        <div className="text-[12px] sm:text-[14px] text-white font-bold flex items-center gap-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
-          LIVE SOLAR STATUS
-        </div>
-        {nasaData && (
-          <div className="mt-1 sm:mt-2 text-[8px] sm:text-[10px] text-cyan-400 opacity-80 leading-tight sm:leading-relaxed">
-            Flare Class: {nasaData.classType || "Normal"}<br />
-            Peak Time: {nasaData.peakTime ? new Date(nasaData.peakTime).toLocaleTimeString() : "Scanning..."}
-          </div>
-        )}
-      </div>
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_200px_rgba(0,0,0,1)]" />
 
       {/* Primary Header */}
-      {!selectedPlanet && (
-        <div className="absolute top-12 left-4 sm:top-16 sm:left-16 pointer-events-none z-10">
-          <div className="flex items-center gap-4 mb-4 sm:mb-6">
-            <div className="w-3 h-3 bg-blue-500 rounded-full animate-ping" />
-            <span className="text-[9px] sm:text-[11px] font-mono tracking-[0.5em] sm:tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
+      {!selectedPlanet && !isImmersive && (
+        <div className="absolute top-16 left-4 sm:top-20 sm:left-16 pointer-events-none z-10 transition-all">
+          <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-6">
+            <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full animate-ping" />
+            <span className="text-[8px] sm:text-[11px] font-mono tracking-[0.4em] sm:tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
           </div>
-          <h1 className="text-4xl sm:text-7xl md:text-9xl font-black italic tracking-tighter opacity-30 uppercase leading-none">Astro_Metric</h1>
-          <p className="text-[8px] sm:text-[10px] font-mono tracking-[0.2em] sm:tracking-[0.4em] text-white/40 mt-4 sm:mt-6 uppercase">SCROLL: DEPTH_ZOOM // CLICK: SPECTRAL_LOCK</p>
+          <h1 className="text-4xl sm:text-7xl md:text-9xl font-black italic tracking-tighter opacity-10 sm:opacity-30 uppercase leading-none">Astro_Metric</h1>
+          <p className="hidden sm:block text-[10px] font-mono tracking-[0.4em] text-white/40 mt-6 uppercase">SCROLL: DEPTH_ZOOM // CLICK: SPECTRAL_LOCK</p>
         </div>
       )}
 
