@@ -1,6 +1,8 @@
 export const PLANET_INFO = {
     Sun: {
-        description: "The Sun is a G-type main-sequence star (G2V) based on its spectral class. It is a nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core. The Sun currently fuses approximately 600 million tons of hydrogen into helium every second, converting 4 million tons of matter into energy. This energy, which can take between 10,000 and 170,000 years to escape the core, is the source of all life and weather on Earth. The solar atmosphere consists of the photosphere, chromosphere, and the transition region, leading to the corona, which paradoxically is much hotter than the surface.",
+        description: "The Sun is a G-type main-sequence star (G2V) based on its spectral class. It is a nearly perfect sphere of hot plasma, heated to incandescence by nuclear fusion reactions in its core. The Sun currently fuses approximately 600 million tons of hydrogen into helium every second, converting 4 million tons of matter into energy.",
+        history: "Formed approximately 4.6 billion years ago from the gravitational collapse of a giant interstellar molecular cloud. Its ignition marked the birth of the solar system, providing the heat and light that would eventually catalyze the formation of the planets.",
+        significance: "The absolute engine of life. The Sun's gravitational pull keeps every body in orbit, while its electromagnetic radiation provides the energy that drives Earth's climate and photosynthesis. Without the Sun, the solar system would be a graveyard of frozen, drifting rocks.",
         stats: {
             "Surface Gravity": "274.0 m/s²",
             "Escape Velocity": "617.7 km/s",
@@ -10,12 +12,21 @@ export const PLANET_INFO = {
             "Rotation Period": "25.05 Days"
         },
         composition: { Hydrogen: "73.46%", Helium: "24.85%", Oxygen: "0.77%", Carbon: "0.29%" },
+        habitability: { esi: "0.00", status: "Extreme Lethality", risk: "Immediate Evaporation" },
+        landmarks: [
+            { name: "The Photosphere", description: "The visible surface where photons finally escape into space. At 6,000°K, it is relatively cool compared to the core.", coords: [0, 8, 0] },
+            { name: "Sunspots", description: "Magnetic anchors where heat flow is restricted, creating cooler 'dark' patches.", coords: [5, 6, 2] },
+            { name: "Solar Coronal Loops", description: "Enormous magnetic arcs that guide million-degree plasma across the solar surface.", coords: [-3, 7, 3] }
+        ],
         color: '#FFCC00',
         mechanics: { eccentricity: "N/A", inclination: "7.25° to Ecliptic", velocity: "220 km/s (Galactic)" },
-        class: "G2V Star"
+        class: "G2V Star",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/sun_sonification.mp3"
     },
     Mercury: {
         description: "Mercury is the smallest planet in the Solar System and the closest to the Sun. Due to its lack of a substantial atmosphere to retain heat, it has the most extreme temperature variations in the solar system, ranging from 100 K at night to 700 K during the day. Its surface is heavily cratered and similar in appearance to the Moon, indicating that it has been geologically inactive for billions of years. Mercury is tidally locked with the Sun in a 3:2 spin-orbit resonance, meaning it rotates three times for every two orbits around the Sun.",
+        history: "Mercury's origins appear to involve a massive impact that stripped away much of its original crust and mantle, leaving behind an oversized iron core. It was known to ancient civilizations as both the 'Morning Star' and 'Evening Star' before its single-identity was confirmed.",
+        significance: "Crucial for understanding the formation of the inner solar system. Its massive iron core suggests the early solar system was a violent place of giant impacts, while its proximity to the Sun allows for high-precision tests of General Relativity.",
         stats: {
             "Surface Gravity": "3.7 m/s²",
             "Surface Pressure": "10⁻¹⁴ bar",
@@ -24,13 +35,20 @@ export const PLANET_INFO = {
             "Density": "5.427 g/cm³",
             "Axial Tilt": "0.034°"
         },
-        composition: { Iron: "70% (Core)", Silicates: "30% (Crust)", Oxygen: "42%", Sodium: "29%" },
+        composition: { Sodium: "29%", Magnesium: "6%", Oxygen: "42%", Potassium: "0.5%", Helium: "6%" },
+        habitability: { esi: "0.59", status: "Hostile", risk: "High Radiation/Thermal Swing" },
+        landmarks: [
+            { name: "Caloris Planitia", description: "One of the largest impact basins in the solar system.", coords: [1.2, 0, 0] }
+        ],
         color: '#A8A8A8',
-        mechanics: { eccentricity: "0.2056", inclination: "7.005°", velocity: "47.36 km/s" },
-        class: "Terrestrial Planet"
+        mechanics: { eccentricity: "0.2056", inclination: "7.005°", velocity: "47.36 km/s", "Aphelion": "69.8M km" },
+        class: "Terrestrial Planet",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/mercury_sonification.mp3"
     },
     Venus: {
         description: "Venus is often described as Earth's sister planet due to their similar size and mass, but it is radically different in every other way. It has the densest atmosphere of the four terrestrial planets, consisting of more than 96% carbon dioxide. The atmospheric pressure at the surface is 92 times that of Earth. Venus is shrouded by an opaque layer of highly reflective clouds of sulfuric acid, preventing its surface from being seen from space in visible light. It may have had water oceans in the past, but these would have vaporized as the temperature rose due to a runaway greenhouse effect.",
+        history: "Venus likely began with a similar climate to Earth, featuring liquid water oceans. However, a runaway greenhouse effect, potentially triggered by proximity to the Sun, led to the total evaporation of its water and the buildup of a crushing CO2 atmosphere.",
+        significance: "A cautionary tale for planetary evolution. Venus serves as Earth's 'Dark Twin,' demonstrating how a planet's climate can enter a feedback loop that leads to total sterilization. It is the hottest planet in the solar system.",
         stats: {
             "Surface Gravity": "8.87 m/s²",
             "Surface Pressure": "92 bar",
@@ -40,12 +58,19 @@ export const PLANET_INFO = {
             "Axial Tilt": "177.3° (Retrograde)"
         },
         composition: { "Carbon Dioxide": "96.5%", Nitrogen: "3.5%", "Sulfur Dioxide": "0.015%", Argon: "0.007%" },
+        habitability: { esi: "0.44", status: "Critical", risk: "Corrosive Acid/Super-Pressure" },
+        landmarks: [
+            { name: "Maxwell Montes", description: "The highest mountain range on Venus.", coords: [0, 2.1, 0] }
+        ],
         color: '#E3BB76',
-        mechanics: { eccentricity: "0.0067", inclination: "3.394°", velocity: "35.02 km/s" },
-        class: "Terrestrial Planet"
+        mechanics: { eccentricity: "0.0067", inclination: "3.394°", velocity: "35.02 km/s", "Axial Tilt": "177.3°" },
+        class: "Terrestrial Planet",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/venus_sonification.mp3"
     },
     Earth: {
-        description: "Earth is the third planet from the Sun and the only astronomical object known to harbor life. This is enabled by Earth being an ocean world; the only one in the Solar System known to harbor liquid surface water. Earth's lithosphere is divided into several rigid tectonic plates that migrate across the surface over periods of many millions of years. Earth's atmosphere consists mostly of nitrogen and oxygen, and it has a powerful magnetic field generated by its active iron core, which shields the planet from damaging solar radiation.",
+        description: "Earth is the third planet from the Sun and the only astronomical object known to harbor life. This is enabled by Earth being an ocean world; the only one in the Solar System known to harbor liquid surface water.",
+        history: "Formed 4.54 billion years ago. The early 'Hadean' Earth was a molten hellscape until the impact of a Mars-sized body, Theia, created the Moon and stabilized Earth's axial tilt. Life emerged shortly after the Great Late Bombardment, approximately 3.8 billion years ago.",
+        significance: "The gold standard for biology. Its liquid water, protective magnetosphere, and stable nitrogen-oxygen atmosphere created the perfect conditions for the 'Great Oxidation Event' and the subsequent evolution of complex life.",
         stats: {
             "Surface Gravity": "9.806 m/s²",
             "Surface Pressure": "1.013 bar",
@@ -55,12 +80,22 @@ export const PLANET_INFO = {
             "Axial Tilt": "23.44°"
         },
         composition: { Nitrogen: "78.08%", Oxygen: "20.95%", Argon: "0.93%", "Carbon Dioxide": "0.04%" },
+        habitability: { esi: "1.00", status: "Optimal", risk: "Low" },
+        landmarks: [
+            { name: "Mount Everest", description: "Earth's highest point, a result of the ongoing collision between the Indian and Eurasian tectonic plates.", coords: [0, 2.2, 0] },
+            { name: "Mariana Trench", description: "The deepest scar on Earth's crust, 11km deep, where pressures reach over 1,000 atmospheres.", coords: [1, -1, 0] },
+            { name: "The Great Barrier Reef", description: "The largest biological structure on the planet, visible from space, acting as a massive carbon sink.", coords: [2.5, -1.2, 0] }
+        ],
         color: '#2271B3',
-        mechanics: { eccentricity: "0.0167", inclination: "0.000° (Ref)", velocity: "29.78 km/s" },
-        class: "Terrestrial Planet"
+        mechanics: { eccentricity: "0.0167", inclination: "0.000° (Ref)", velocity: "29.78 km/s", "Day Length": "23.93 hours" },
+        class: "Terrestrial Planet",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/earth_sonification.mp3",
+        moons: ['Luna']
     },
     Mars: {
         description: "Mars is a terrestrial planet with a thin atmosphere, having surface features reminiscent both of the impact craters of the Moon and the valleys, deserts, and polar ice caps of Earth. It is home to Olympus Mons, the largest volcano and highest known mountain on any planet in the Solar System, and Valles Marineris, one of the largest canyons. The smooth Borealis basin in the Northern Hemisphere covers 40% of the planet and may be a giant impact feature. Mars has two moons, Phobos and Deimos, which are small and irregularly shaped.",
+        history: "4 billion years ago, Mars was likely a warm, wet world with a thicker atmosphere. The loss of its global magnetic field led to the solar wind stripping away its protection, turning it into the frozen, irradiated desert we see today.",
+        significance: "The prime candidate for future human colonization. Mars' history of liquid water and its relative proximity to Earth make it the most likely place to find fossilized evidence of past extraterrestrial life.",
         stats: {
             "Surface Gravity": "3.721 m/s²",
             "Surface Pressure": "0.006 bar",
@@ -70,12 +105,20 @@ export const PLANET_INFO = {
             "Axial Tilt": "25.19°"
         },
         composition: { "Carbon Dioxide": "95.3%", Nitrogen: "2.7%", Argon: "1.6%", Oxygen: "0.13%" },
+        habitability: { esi: "0.73", status: "Challenging", risk: "Partial Pressure Loss/Cold" },
+        landmarks: [
+            { name: "Olympus Mons", description: "The largest volcano in the solar system.", coords: [0.5, 1.8, 0] },
+            { name: "Valles Marineris", description: "A vast canyon system over 4,000 km long.", coords: [-1, 0, 0] }
+        ],
         color: '#E27B58',
-        mechanics: { eccentricity: "0.0934", inclination: "1.850°", velocity: "24.07 km/s" },
-        class: "Terrestrial Planet"
+        mechanics: { eccentricity: "0.0934", inclination: "1.850°", velocity: "24.07 km/s", "Perihelion": "206M km" },
+        class: "Terrestrial Planet",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/mars_sonification.mp3"
     },
     Jupiter: {
         description: "Jupiter is the largest planet in the Solar System, a gas giant with a mass more than two and a half times that of all the other planets in the Solar System combined. It is primarily composed of hydrogen, but helium constitutes one-fourth of its mass and one-tenth of its volume. It probably has a rocky core of heavier elements, but like the other giant planets, Jupiter lacks a well-defined solid surface. The Great Red Spot, a giant storm known to have existed since at least the 17th century, is visible through even small telescopes.",
+        history: "As the first planet to form, Jupiter vacuumed up the majority of the gas and dust left over from the Sun's formation. It likely migrated throughout the solar system in its early years, acting as a gravitational wrecking ball that shaped the current planetary orbits.",
+        significance: "The solar system's protector. Jupiter's massive gravity acts as a 'cosmic vacuum cleaner,' attracting and diverting comets and asteroids that might otherwise strike the inner terrestrial planets, including Earth.",
         stats: {
             "Surface Gravity": "24.79 m/s²",
             "Surface Pressure": ">100 bar",
@@ -85,12 +128,20 @@ export const PLANET_INFO = {
             "Axial Tilt": "3.13°"
         },
         composition: { Hydrogen: "89.8%", Helium: "10.1%", Methane: "0.3%", Ammonia: "0.02%" },
+        habitability: { esi: "0.29", status: "Impossible", risk: "Gravitational Collapse/Radiation" },
+        landmarks: [
+            { name: "The Great Red Spot", description: "A persistent high-pressure region producing an anticyclonic storm.", coords: [2, -2, 4] }
+        ],
         color: '#D39C7E',
-        mechanics: { eccentricity: "0.0489", inclination: "1.303°", velocity: "13.07 km/s" },
-        class: "Gas Giant"
+        mechanics: { eccentricity: "0.0489", inclination: "1.303°", velocity: "13.07 km/s", "Aphelion": "816M km" },
+        class: "Gas Giant",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/03/hubble_sonification_jupiter.mp3",
+        moons: ['Io', 'Europa', 'Ganymede', 'Callisto']
     },
     Saturn: {
         description: "Saturn is a gas giant with an average radius of about nine times that of Earth. Although it has only one-eighth the average density of Earth, with its larger volume, Saturn is over 95 times more massive. Saturn's interior is most likely composed of a core of iron–nickel and rock (silicon and oxygen compounds). This core is surrounded by a deep layer of metallic hydrogen, an intermediate layer of liquid hydrogen and liquid helium, and finally, a gaseous outer layer.",
+        history: "Saturn's iconic rings are a relatively recent addition, likely formed within the last 100 million years by the destruction of an icy moon that ventured past the Roche limit. Its formation followed shortly after Jupiter's, capturing the remaining nebular gas.",
+        significance: "A masterpiece of orbital mechanics. Its rings provide the best laboratory for studying planetary accretion disks, while its moon Titan is the only other body in the solar system with a dense atmosphere and liquid (methane) lakes.",
         stats: {
             "Surface Gravity": "10.44 m/s²",
             "Wind Speed": "1,800 km/h",
@@ -100,12 +151,20 @@ export const PLANET_INFO = {
             "Axial Tilt": "26.73°"
         },
         composition: { Hydrogen: "96.3%", Helium: "3.2%", Methane: "0.45%", Ammonia: "0.01%" },
+        habitability: { esi: "0.25", status: "Impossible", risk: "No Solid Surface/Pressure" },
+        landmarks: [
+            { name: "Hexagon Storm", description: "A persistent hexagonal cloud pattern at Saturn's north pole.", coords: [0, 4.8, 0] }
+        ],
         color: '#C5AB6E',
-        mechanics: { eccentricity: "0.0565", inclination: "2.485°", velocity: "9.68 km/s" },
-        class: "Gas Giant"
+        mechanics: { eccentricity: "0.0565", inclination: "2.485°", velocity: "9.68 km/s", "Aphelion": "1.5B km" },
+        class: "Gas Giant",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/saturn_sonification.mp3",
+        moons: ['Titan']
     },
     Uranus: {
         description: "Uranus is an ice giant, meaning it has a higher proportion of 'ices' such as water, ammonia, and methane, along with traces of hydrocarbons. It has the coldest planetary atmosphere in the Solar System, with a minimum temperature of 49 K. It has a complex, layered cloud structure; water is thought to make up the lowest clouds, and methane the uppermost layer. The interior of Uranus is mainly composed of ices and rock.",
+        history: "Uranus likely suffered a massive collision early in its history, which knocked the planet onto its side. This unique 'sideways' orientation means its poles face the Sun for decades, creating extreme seasonal variations.",
+        significance: "An anomaly in the solar system. Its sideways tilt and unusually calm atmosphere (compared to Neptune) baffle planetary scientists. It represents the Ice Giant class, common throughout the galaxy.",
         stats: {
             "Surface Gravity": "8.69 m/s²",
             "Obliquity": "97.77° (Sideways)",
@@ -114,13 +173,19 @@ export const PLANET_INFO = {
             "Density": "1.270 g/cm³",
             "Sidereal Orbit": "84.02 yrs"
         },
-        composition: { Hydrogen: "82.5%", Helium: "15.2%", Methane: "2.3%", Deuterium: "0.01%" },
+        composition: { Hydrogen: "82.5%", Helium: "15.2%", Methane: "2.3%", Deuterium: "0.01%", Ethane: "Trace" },
+        habitability: { esi: "0.19", status: "Lethal", risk: "Extreme Cold/Pressure" },
+        landmarks: [
+            { name: "Titania Orbit", description: "Primary visual anchor for Uranus's largest moon.", coords: [4, 0, 0] }
+        ],
         color: '#BBE1E4',
-        mechanics: { eccentricity: "0.0472", inclination: "0.772°", velocity: "6.80 km/s" },
+        mechanics: { eccentricity: "0.0472", inclination: "0.772°", velocity: "6.80 km/s", "Aphelion": "3.0B km" },
         class: "Ice Giant"
     },
     Neptune: {
         description: "Neptune is the most distant known solar planet and the fourth-largest planet by diameter. It is 17 times the mass of Earth and slightly more massive than its near-twin Uranus. Neptune is denser and physically smaller than Uranus because its greater mass causes more gravitational compression of its atmosphere. The planet orbits the Sun once every 164.8 years at an average distance of 30.1 AU. Neptune is not visible to the unaided eye and is the only planet in the Solar System found by mathematical prediction rather than by empirical observation.",
+        history: "Neptune was the first planet located via mathematical desk-work rather than telescope observation. Its existence was predicted by Urbain Le Verrier to explain discrepancies in Uranus's orbit, and it was found within 1 degree of his prediction.",
+        significance: "The windy giant. Neptune features the fastest winds in the solar system, reaching supersonic speeds. Its internal heat source remains a mystery, as it radiates 2.6 times the heat it receives from the Sun.",
         stats: {
             "Surface Gravity": "11.15 m/s²",
             "Wind Speed": "2,100 km/h",
@@ -129,13 +194,19 @@ export const PLANET_INFO = {
             "Density": "1.638 g/cm³",
             "Axial Tilt": "28.32°"
         },
-        composition: { Hydrogen: "80%", Helium: "19%", Methane: "1.5%", Ethane: "0.0001%" },
+        composition: { Hydrogen: "80%", Helium: "19%", Methane: "1.5%", Ethane: "0.0001%", Acetylene: "Trace" },
+        habitability: { esi: "0.18", status: "Lethal", risk: "Supersonic Winds" },
+        landmarks: [
+            { name: "The Great Dark Spot", description: "An anticyclonic storm on Neptune similar to Jupiter's.", coords: [2, 0, 5] }
+        ],
         color: '#6081FF',
-        mechanics: { eccentricity: "0.0113", inclination: "1.767°", velocity: "5.43 km/s" },
+        mechanics: { eccentricity: "0.0113", inclination: "1.767°", velocity: "5.43 km/s", "Aphelion": "4.5B km" },
         class: "Ice Giant"
     },
     Pluto: {
         description: "Pluto is a dwarf planet in the Kuiper belt, a ring of bodies beyond the orbit of Neptune. It was the first and largest Kuiper belt object to be discovered. Pluto is the ninth-largest and tenth-most-massive known object directly orbiting the Sun. It is the largest known trans-Neptunian object by volume but is less massive than Eris. Like other Kuiper belt objects, Pluto is primarily made of ice and rock and is relatively small—one-sixth the mass of the Moon and one-third its volume.",
+        history: "Discovered in 1930 and classified as a planet for 76 years, Pluto's status was changed to 'Dwarf Planet' in 2006 as more similar bodies were found in the Kuiper Belt. The 2015 New Horizons flyby revealed it to be geologically active.",
+        significance: "The gateway to the Kuiper Belt. Its complex surface of nitrogen ice glaciers and towering water-ice mountains suggests that small, cold worlds can be far more dynamic than previously imagined.",
         stats: {
             "Surface Gravity": "0.62 m/s²",
             "Surface Pressure": "10 μbar",
@@ -145,9 +216,113 @@ export const PLANET_INFO = {
             "Axial Tilt": "122.53°"
         },
         composition: { "Nitrogen Ice": "98%", Methane: "0.5%", "Carbon Monoxide": "0.5%", Water: "Traces" },
+        habitability: { esi: "0.07", status: "Inert", risk: "Atmospheric Freeze-out" },
+        landmarks: [
+            { name: "Tombaugh Regio", description: "The vast, heart-shaped nitrogen ice plain.", coords: [0.8, 0, 0] }
+        ],
         color: '#968570',
-        mechanics: { eccentricity: "0.2488", inclination: "17.16°", velocity: "4.74 km/s" },
-        class: "Dwarf Planet"
+        mechanics: { eccentricity: "0.2488", inclination: "17.16°", velocity: "4.74 km/s", "Axial Tilt": "122.5°" },
+        class: "Dwarf Planet",
+        sonification_url: "https://www.nasa.gov/wp-content/uploads/2023/04/pluto_sonification.mp3"
+    },
+    'Asteroid Belt': {
+        description: "A vast circumstellar disc in the Solar System located roughly between the orbits of the planets Mars and Jupiter. It is occupied by numerous irregularly shaped bodies called asteroids or minor planets.",
+        history: "The belt formed from the primordial solar nebula as a group of planetesimals. These planetesimals were prevented from accreting into a planet by the gravitational perturbations of Jupiter, leading to a permanent zone of collision and fragmentation.",
+        significance: "A cosmic construction site. The belt contains vital clues about the early solar system's chemical composition. It is a potential source of trillions of dollars in mineral wealth, from platinum-group metals to water ice for deep-space fuel.",
+        stats: {
+            "Total Mass": "4% of the Moon",
+            "Member Count": "> 1 Million",
+            "Largest Body": "Ceres (Dwarf Planet)",
+            "Distance": "2.2 to 3.2 AU",
+            "Composition": "C-type, S-type, M-type",
+            "Thickness": "1 AU Wide"
+        },
+        composition: { Silicates: "60%", Carbon: "25%", Iron: "10%", Water: "5%" },
+        habitability: { esi: "0.02", status: "Hostile", risk: "Impact/Micro-gravity" },
+        landmarks: [
+            { name: "Ceres Basin", description: "The largest object in the belt, a dwarf planet with potential water vapor plumes.", coords: [0.5, 0, 0] },
+            { name: "Vesta Peak", description: "A massive impact crater at the south pole of the second-largest asteroid.", coords: [-0.3, 0.4, 0] }
+        ],
+        color: '#777777',
+        mechanics: { eccentricity: "0.07 to 0.2", inclination: "0° to 20°", velocity: "17-19 km/s", "Gap": "Kirkwood Gaps" },
+        class: "Asteroid Field"
+    },
+    Luna: {
+        description: "Earth's only natural satellite and the fifth largest moon in the Solar System. It is the only celestial body other than Earth on which humans have set foot.",
+        history: "Formed 4.51 billion years ago, about 60 million years after the origin of the Solar System. The leading hypothesis is that the Moon formed from the debris left over after a giant impact between Earth and a Mars-sized body called Theia.",
+        significance: "The anchor of Earth's stability. Its gravitational pull stabilizes Earth's axial tilt, preventing wild climate swings, and generates the tides that catalyzed the evolution of life in the oceans.",
+        stats: {
+            "Surface Gravity": "1.62 m/s²",
+            "Surface Pressure": "10⁻¹³ bar",
+            "Mean Radius": "1,737.4 km",
+            "Density": "3.344 g/cm³",
+            "Magnetic Field": "Weak / Crustal",
+            "Distance to Earth": "384,400 km"
+        },
+        composition: { Oxygen: "43%", Silicon: "21%", Magnesium: "10%", Iron: "9%", Calcium: "3%" },
+        habitability: { esi: "0.27", status: "Hostile", risk: "Radiation / Micrometeoroids" },
+        landmarks: [
+            { name: "Sea of Tranquility", description: "The landing site of Apollo 11, where humans first walked on the lunar surface.", coords: [0.2, 0.1, 0.1] },
+            { name: "Tycho Crater", description: "A prominent impact crater with an extensive ray system visible from Earth.", coords: [-0.4, -0.6, 0.2] }
+        ],
+        color: '#A8A8A8',
+        mechanics: { eccentricity: "0.0549", inclination: "5.145°", velocity: "1.022 km/s", "Rotation": "Tidally Locked" },
+        class: "Natural Satellite"
+    },
+    Io: {
+        description: "The innermost and third-largest of the four Galilean moons of Jupiter. It is the most geologically active body in the Solar System, with over 400 active volcanoes.",
+        history: "Io's extremely high volcanic activity is the result of tidal heating from friction generated within Io's interior as it is pulled between Jupiter and the other Galilean moons.",
+        significance: "The volcanic heart of the Jovian system. Io's eruptions can reach 500 km into space and contribute to Jupiter's massive magnetosphere, creating a lethal radiation environment.",
+        stats: { "Surface Gravity": "1.796 m/s²", "Mean Radius": "1,821.6 km", "Density": "3.528 g/cm³", "Temp": "-143°C" },
+        composition: { Sulfur: "90%", Silicates: "10%", "Sulfur Dioxide": "Trace", Oxygen: "Trace" },
+        habitability: { esi: "0.15", status: "Lethal", risk: "Intense Radiation / Volcanism" },
+        color: '#ffffaa',
+        mechanics: { eccentricity: "0.0041", inclination: "0.04°", velocity: "17.33 km/s" },
+        class: "Galilean Moon"
+    },
+    Europa: {
+        description: "The smallest of the four Galilean moons orbiting Jupiter, Europa is a world of ice and potentially hidden oceans. It is considered one of the most promising places in the solar system to find life.",
+        history: "Europa's smooth, young surface suggests a hidden ocean of liquid water exists beneath a 10-25 km thick icy crust, kept warm by tidal heating from Jupiter.",
+        significance: "Humanity's best hope for finding extraterrestrial life. Its sub-surface ocean likely contains twice as much water as all of Earth's oceans combined.",
+        stats: { "Surface Gravity": "1.315 m/s²", "Mean Radius": "1,560.8 km", "Density": "3.013 g/cm³", "Ocean Depth": "100 km" },
+        composition: { "Water Ice": "90%", Oxygen: "Trace", Salts: "5%", Silicates: "5%" },
+        habitability: { esi: "0.64 (Subsurface)", status: "Active Potential", risk: "Radiation / Cryo-implosion" },
+        color: '#ffffff',
+        mechanics: { eccentricity: "0.009", inclination: "0.47°", velocity: "13.74 km/s" },
+        class: "Galilean Moon"
+    },
+    Ganymede: {
+        description: "The largest and most massive moon of Jupiter and in the Solar System. It is the only known moon to have its own magnetic field.",
+        history: "Ganymede is composed of approximately equal amounts of silicate rock and water ice. It is a fully differentiated body with an iron-rich, liquid core and an internal ocean.",
+        significance: "A moon that acts like a planet. Its unique magnetosphere and complex geological history make it a prime target for the ESA JUICE mission.",
+        stats: { "Surface Gravity": "1.428 m/s²", "Mean Radius": "2,634.1 km", "Density": "1.936 g/cm³", "Magnetic Field": "Permanent" },
+        composition: { "Water Ice": "50%", Silicates: "50%", Oxygen: "Trace", Ozone: "Trace" },
+        habitability: { esi: "0.32", status: "Hostile", risk: "Deep Freeze" },
+        color: '#aaaaaa',
+        mechanics: { eccentricity: "0.0013", inclination: "0.20°", velocity: "10.88 km/s" },
+        class: "Galilean Moon"
+    },
+    Callisto: {
+        description: "The second-largest moon of Jupiter and the third-largest in the Solar System. It is the most heavily cratered object in the Solar System.",
+        history: "Callisto has not undergone any significant differentiation and shows no signs of geological activity. It is a 'frozen' relic from the early Jovian system formation.",
+        significance: "A geological time capsule. Its ancient, unchanging surface provides a record of the early solar system's impact history, spanning billions of years.",
+        stats: { "Surface Gravity": "1.236 m/s²", "Mean Radius": "2,410.3 km", "Density": "1.834 g/cm³", "Age": "4.5 Billion Yrs" },
+        composition: { "Water Ice": "40%", Silicates: "60%", "Carbon Dioxide": "Trace", Nitrogen: "Trace" },
+        habitability: { esi: "0.22", status: "Dead", risk: "Thermal Exhaustion" },
+        color: '#888888',
+        mechanics: { eccentricity: "0.0074", inclination: "0.281°", velocity: "8.20 km/s" },
+        class: "Galilean Moon"
+    },
+    Titan: {
+        description: "The largest moon of Saturn and the second-largest natural satellite in the Solar System. It is the only moon known to have a dense atmosphere and the only known place besides Earth where evidence of stable bodies of surface liquid has been found.",
+        history: "Titan's atmosphere is primarily nitrogen, with trace methane. It experiences a methane cycle similar to Earth's water cycle, featuring methane rain, rivers, and lakes.",
+        significance: "A pre-biotic chemical laboratory. Titan's organic-rich chemistry bears a resemblance to the early Earth's atmosphere before life appeared and oxygen was released.",
+        stats: { "Surface Gravity": "1.352 m/s²", "Surface Pressure": "1.45 bar", "Mean Radius": "2,574.7 km", "Temp": "-179°C" },
+        composition: { Nitrogen: "98.4%", Methane: "1.4%", Argon: "0.1%", Ethane: "Trace" },
+        habitability: { esi: "0.62", status: "Candidate", risk: "Cryogenic Cold / Anoxia" },
+        color: '#ffcc66',
+        mechanics: { eccentricity: "0.0288", inclination: "0.348°", velocity: "5.57 km/s" },
+        class: "Natural Satellite"
     }
 };
 
@@ -161,8 +336,9 @@ export const PLANET_CONFIG = [
         ]
     },
     { name: 'Mars', dist: 85, size: 1.8, speed: 0.45 },
+    { name: 'Asteroid Belt', dist: 102, size: 0.1, speed: 0.35 },
     {
-        name: 'Jupiter', dist: 120, size: 5.5, speed: 0.25, moons: [
+        name: 'Jupiter', dist: 125, size: 5.5, speed: 0.25, moons: [
             { name: 'Io', size: 0.4, dist: 8, speed: 3, color: '#ffffaa' },
             { name: 'Europa', size: 0.35, dist: 10, speed: 2.2, color: '#ffffff' },
             { name: 'Ganymede', size: 0.6, dist: 12, speed: 1.5, color: '#aaaaaa' },
@@ -170,17 +346,79 @@ export const PLANET_CONFIG = [
         ]
     },
     {
-        name: 'Saturn', dist: 160, size: 4.8, speed: 0.18, moons: [
+        name: 'Saturn', dist: 165, size: 4.8, speed: 0.18, moons: [
             { name: 'Titan', size: 0.7, dist: 10, speed: 1.2, color: '#ffcc66' }
         ]
     },
-    { name: 'Uranus', dist: 200, size: 3.2, speed: 0.12 },
-    { name: 'Neptune', dist: 235, size: 3.1, speed: 0.09 },
-    { name: 'Pluto', dist: 265, size: 0.8, speed: 0.06 }
+    { name: 'Uranus', dist: 205, size: 3.2, speed: 0.12 },
+    { name: 'Neptune', dist: 240, size: 3.1, speed: 0.09 },
+    { name: 'Pluto', dist: 270, size: 0.8, speed: 0.06 }
 ];
 
 export const MISSION_DATA = [
-    { name: 'Voyager 1', color: '#ff4444', path: [[0, 0, 0], [40, 20, 50], [90, 10, 120], [180, 5, 250], [300, 0, 400]], size: 1.5 },
-    { name: 'Juno', color: '#44ff44', path: [[0, 0, 0], [10, 50, 20], [80, 20, 80], [120, 5, 120]], size: 1.2 },
-    { name: 'New Horizons', color: '#4444ff', path: [[0, 0, 0], [150, 5, 150], [280, 2, 280], [350, 0, 400]], size: 1.0 }
+    {
+        name: 'Voyager 1',
+        agency: 'NASA',
+        color: '#ff4444',
+        path: [[65, 0, 0], [120, 10, 50], [160, -5, 120], [250, 20, 300], [400, 40, 500]],
+        size: 1.5,
+        target: 'Interstellar Space',
+        launch: '1977',
+        status: 'Active',
+        description: 'First spacecraft to cross the heliopause. Carries the Golden Record.',
+        scientific_goal: 'Study the outer Solar System and interstellar medium.',
+        importance: 'Humanity\'s furthest ambassador, proving that man-made objects can escape the Sun\'s influence.'
+    },
+    {
+        name: 'Mangalyaan (MOM)',
+        agency: 'ISRO',
+        color: '#ff9933',
+        path: [[65, 0, 0], [75, 15, 10], [90, 5, -5], [110, 2, 0]],
+        size: 1.2,
+        target: 'Mars',
+        launch: '2013',
+        status: 'Success',
+        description: 'India\'s first interplanetary mission; reached Mars orbit on maiden attempt.',
+        scientific_goal: 'Identify methane and atmospheric composition to search for signs of past life.',
+        importance: 'Demonstrated cost-effective interplanetary travel and ISRO\'s high-precision orbital engineering.'
+    },
+    {
+        name: 'Chandrayaan-3',
+        agency: 'ISRO',
+        color: '#ffffff',
+        path: [[65, 0, 0], [66, 2, 2], [67, 1, 0]],
+        size: 0.8,
+        target: 'Moon',
+        launch: '2023',
+        status: 'Success',
+        description: 'First mission to soft-land near the lunar south pole.',
+        scientific_goal: 'Analyze lunar soil (Regolith) and detect water ice in permanently shadowed regions.',
+        importance: 'Secured India\'s place as a global lunar explorer and paved the way for future South Pole colonies.'
+    },
+    {
+        name: 'Rosetta',
+        agency: 'ESA',
+        color: '#4488ff',
+        path: [[65, 0, 0], [140, 30, 80], [180, 10, 140]],
+        size: 1.2,
+        target: 'Comet 67P',
+        launch: '2004',
+        status: 'Completed',
+        description: 'Historic mission that landed the Philae probe on a moving comet.',
+        scientific_goal: 'Determine if water on Earth was delivered by cometary impacts.',
+        importance: 'Unprecedented orbital maneuver successfully landing a probe on a 2.5 mile wide fast-moving comet.'
+    },
+    {
+        name: 'Tianwen-1',
+        agency: 'CNSA',
+        color: '#ffcc00',
+        path: [[65, 0, 0], [90, 10, 20], [110, 5, 0]],
+        size: 1.1,
+        target: 'Mars',
+        launch: '2020',
+        status: 'Active',
+        description: 'China\'s first Mars mission with orbiter, lander, and Zhurong rover.',
+        scientific_goal: 'Map Martian geological structures and surface soil characteristics.',
+        importance: 'China became the second nation to successfully operate a rover on the Martian surface.'
+    }
 ];

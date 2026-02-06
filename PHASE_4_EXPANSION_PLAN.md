@@ -45,6 +45,12 @@ Every object needs a story.
 ## 5. ⚡ Technical Benchmarks
 - [ ] **Asset Bundling**: Moving all planet textures to a dedicated static assets folder for faster initial load.
 - [ ] **State Persistence**: Memory system to remember your "Lens Mode" and "Time Scale" between sessions.
+- [ ] **Section 6: The "Deep Dive" Explorer**:
+    - [ ] Create a "Tap to Explore" transition flow.
+    - [ ] **Landmark Module**: Interactive map of mountains, craters, and storm systems.
+    - [ ] **Bio-Potential Module**: Habitability ESI (Earth Similarity Index) gauges.
+    - [ ] **Live System Monitor**: Persistent 3D Mini-Map showing real-time planet/moon positions.
+    - [ ] **360° Panorama Support**: Implement an overlay for ground-level rover perspectives.
 
 ---
 
