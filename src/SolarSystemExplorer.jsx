@@ -465,14 +465,14 @@ export default function SolarSystemExplorer() {
     <div style={{ width: '100vw', height: '100vh', backgroundColor: '#050508', position: 'relative', overflow: 'hidden' }} className="font-mono text-cyan-200">
       {/* --- EMERGENCY DIAGNOSTIC OVERLAY --- */}
       <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '4px', background: 'linear-gradient(90deg, #00ffff, #0055ff)', zIndex: 10001, boxShadow: '0 0 15px #00ffff' }} />
-      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10002, background: 'rgba(0, 0, 0, 0.9)', border: '1px solid #00ffff', padding: '12px 20px', borderRadius: '4px', boxShadow: '0 0 20px rgba(0,255,255,0.2)' }}>
-        <div style={{ fontSize: '12px', fontWeight: '900', color: '#00ffff', marginBottom: '4px' }}>ASTRO_METRIC // ENGINE_CORE_REF</div>
-        <div style={{ fontSize: '9px', color: '#fff' }}>
+      <div style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 10002, background: 'rgba(0, 0, 0, 0.9)', border: '1px solid #00ffff', padding: '10px 15px', borderRadius: '4px', boxShadow: '0 0 20px rgba(0,255,255,0.2)' }} className="sm:p-5">
+        <div style={{ fontSize: '10px', fontWeight: '900', color: '#00ffff', marginBottom: '4px' }} className="sm:text-xs">ASTRO_METRIC // ENGINE_CORE_REF</div>
+        <div style={{ fontSize: '8px', color: '#fff' }} className="sm:text-[9px]">
           STATUS: <span style={{ color: '#00ff00' }}>OPTIMAL</span>
-          <span style={{ marginLeft: '10px', opacity: 0.5 }}>[{"=".repeat(pulse % 5)}{" ".repeat(5 - (pulse % 5))}]</span>
+          <span style={{ marginLeft: '10px', opacity: 0.5 }} className="hidden sm:inline">[{"=".repeat(pulse % 5)}{" ".repeat(5 - (pulse % 5))}]</span>
         </div>
-        <div style={{ fontSize: '9px', color: '#00ffff', marginTop: '4px' }}>TELEMETRY_LINK: ACTIVE</div>
-        <button onClick={() => window.location.reload()} style={{ marginTop: '10px', background: '#00ffff', color: '#000', border: 'none', padding: '6px 12px', fontSize: '10px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '2px', width: '100%' }}>FORCED_CACHE_FLUSH</button>
+        <div style={{ fontSize: '8px', color: '#00ffff', marginTop: '4px' }} className="sm:text-[9px]">TELEMETRY_LINK: ACTIVE</div>
+        <button onClick={() => window.location.reload()} style={{ marginTop: '8px', background: '#00ffff', color: '#000', border: 'none', padding: '4px 8px', fontSize: '9px', fontWeight: 'bold', cursor: 'pointer', borderRadius: '2px', width: '100%' }} className="sm:text-[10px] sm:mt-3">FORCED_CACHE_FLUSH</button>
       </div>
       {/* --- END EMERGENCY OVERLAY --- */}
 
@@ -500,7 +500,8 @@ export default function SolarSystemExplorer() {
       )}
 
       {/* GLOBAL HUD CONTROLS */}
-      <div className="absolute bottom-8 right-8 z-50 flex flex-col gap-4 p-6 bg-black/80 border border-cyan-500/30 backdrop-blur-xl rounded-xl">
+      <div className="absolute bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 flex flex-col gap-3 sm:gap-4 p-4 sm:p-6 bg-black/80 border border-cyan-500/30 backdrop-blur-xl rounded-xl max-w-[calc(100vw-2rem)]">
+
         <div className="text-[10px] tracking-[0.2em] text-cyan-500/70 mb-2 uppercase font-bold">Terminal Control Unit</div>
 
         {/* Time Scale Controller */}
@@ -512,7 +513,7 @@ export default function SolarSystemExplorer() {
           <input
             type="range" min="-10" max="100" step="0.5" value={timeScale}
             onChange={(e) => setTimeScale(parseFloat(e.target.value))}
-            className="w-48 appearance-none bg-cyan-900/40 h-1.5 rounded-full overflow-hidden outline-none accent-cyan-400"
+            className="w-32 sm:w-48 appearance-none bg-cyan-900/40 h-1.5 rounded-full overflow-hidden outline-none accent-cyan-400"
           />
         </div>
 
@@ -573,14 +574,14 @@ export default function SolarSystemExplorer() {
       <div className="absolute inset-0 pointer-events-none border-[1px] border-white/[0.03]" />
 
       {/* Top Left: NASA Live Feed */}
-      <div className="absolute top-8 left-8 z-50 p-4 bg-black/40 border-l-2 border-cyan-500 backdrop-blur-md">
-        <div className="text-[10px] text-cyan-500 font-bold mb-1 uppercase tracking-tighter">NASA DONKI SEC_OFFICE</div>
-        <div className="text-[14px] text-white font-bold flex items-center gap-2">
+      <div className="absolute top-4 left-4 sm:top-8 sm:left-8 z-50 p-3 sm:p-4 bg-black/40 border-l-2 border-cyan-500 backdrop-blur-md max-w-[200px] sm:max-w-none">
+        <div className="text-[8px] sm:text-[10px] text-cyan-500 font-bold mb-1 uppercase tracking-tighter">NASA DONKI SEC_OFFICE</div>
+        <div className="text-[12px] sm:text-[14px] text-white font-bold flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
           LIVE SOLAR STATUS
         </div>
         {nasaData && (
-          <div className="mt-2 text-[10px] text-cyan-400 opacity-80 leading-relaxed">
+          <div className="mt-1 sm:mt-2 text-[8px] sm:text-[10px] text-cyan-400 opacity-80 leading-tight sm:leading-relaxed">
             Flare Class: {nasaData.classType || "Normal"}<br />
             Peak Time: {nasaData.peakTime ? new Date(nasaData.peakTime).toLocaleTimeString() : "Scanning..."}
           </div>
@@ -590,58 +591,58 @@ export default function SolarSystemExplorer() {
 
       {/* Primary Header */}
       {!selectedPlanet && (
-        <div className="absolute top-16 left-16 pointer-events-none z-10">
-          <div className="flex items-center gap-4 mb-6">
+        <div className="absolute top-12 left-4 sm:top-16 sm:left-16 pointer-events-none z-10">
+          <div className="flex items-center gap-4 mb-4 sm:mb-6">
             <div className="w-3 h-3 bg-blue-500 rounded-full animate-ping" />
-            <span className="text-[11px] font-mono tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
+            <span className="text-[9px] sm:text-[11px] font-mono tracking-[0.5em] sm:tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
           </div>
-          <h1 className="text-7xl md:text-9xl font-black italic tracking-tighter opacity-30 uppercase leading-none">Astro_Metric</h1>
-          <p className="text-[10px] font-mono tracking-[0.4em] text-white/40 mt-6">SCROLL: DEPTH_ZOOM // CLICK: SPECTRAL_LOCK</p>
+          <h1 className="text-4xl sm:text-7xl md:text-9xl font-black italic tracking-tighter opacity-30 uppercase leading-none">Astro_Metric</h1>
+          <p className="text-[8px] sm:text-[10px] font-mono tracking-[0.2em] sm:tracking-[0.4em] text-white/40 mt-4 sm:mt-6 uppercase">SCROLL: DEPTH_ZOOM // CLICK: SPECTRAL_LOCK</p>
         </div>
       )}
 
       {/* Interaction Cursor Tag */}
       {hoveredPlanet && !selectedPlanet && (
-        <div className="absolute bottom-16 left-1/2 -translate-x-1/2 px-12 py-4 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-full animate-pulse z-20 pointer-events-none">
-          <span className="text-[11px] font-black tracking-[0.6em] text-blue-400 uppercase">Tracking: {hoveredPlanet}</span>
+        <div className="absolute bottom-24 sm:bottom-16 left-1/2 -translate-x-1/2 px-8 sm:px-12 py-3 sm:py-4 bg-white/[0.02] backdrop-blur-3xl border border-white/10 rounded-full animate-pulse z-20 pointer-events-none">
+          <span className="text-[9px] sm:text-[11px] font-black tracking-[0.3em] sm:tracking-[0.6em] text-blue-400 uppercase">Tracking: {hoveredPlanet}</span>
         </div>
       )}
 
       {/* DEEP ANALYTICS SPLIT-SCREEN PANEL */}
       {selectedPlanet && PLANET_INFO[selectedPlanet] && (
         <div className="absolute inset-0 flex items-center justify-end pointer-events-none">
-          <div className="w-full md:w-[42%] h-full bg-black/60 backdrop-blur-[60px] border-l border-white/10 p-12 md:p-20 flex flex-col justify-start pointer-events-auto shadow-[-150px_0_200px_rgba(0,0,0,0.9)] border-r-[20px] border-r-blue-600 animate-in slide-in-from-right-full duration-700 overflow-y-auto custom-scrollbar">
+          <div className="w-full md:w-[42%] h-full bg-black/60 backdrop-blur-[60px] border-l border-white/10 p-6 sm:p-12 md:p-20 flex flex-col justify-start pointer-events-auto shadow-[-150px_0_200px_rgba(0,0,0,0.9)] border-r-[10px] sm:border-r-[20px] border-r-blue-600 animate-in slide-in-from-right-full duration-700 overflow-y-auto custom-scrollbar">
 
-            <header className="mb-16 pt-10">
-              <div className="flex items-center gap-5 mb-8">
-                <div className="w-20 h-[1px] bg-blue-500" />
-                <span className="text-[11px] font-black tracking-[1em] text-blue-500 uppercase">Core_Telemetry</span>
+            <header className="mb-8 sm:mb-16 pt-10 sm:pt-10">
+              <div className="flex items-center gap-3 sm:gap-5 mb-4 sm:mb-8">
+                <div className="w-12 sm:w-20 h-[1px] bg-blue-500" />
+                <span className="text-[9px] sm:text-[11px] font-black tracking-[0.5em] sm:tracking-[1em] text-blue-500 uppercase">Core_Telemetry</span>
               </div>
-              <h2 className="text-8xl md:text-[10rem] font-black italic tracking-tighter leading-none" style={{ color: PLANET_INFO[selectedPlanet].color }}>
+              <h2 className="text-5xl sm:text-8xl md:text-[10rem] font-black italic tracking-tighter leading-none" style={{ color: PLANET_INFO[selectedPlanet].color }}>
                 {selectedPlanet}
               </h2>
-              <div className="flex items-center gap-4 mt-8">
-                <span className="px-4 py-1 border border-blue-500/30 text-blue-400 font-mono text-[10px] uppercase tracking-widest rounded-full">{PLANET_INFO[selectedPlanet].class}</span>
-                <p className="text-white/20 font-mono text-[10px] uppercase tracking-[0.4em]">Status: Signal_Lock</p>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-6 sm:mt-8">
+                <span className="px-3 py-0.5 sm:px-4 sm:py-1 border border-blue-500/30 text-blue-400 font-mono text-[9px] sm:text-[10px] uppercase tracking-widest rounded-full">{PLANET_INFO[selectedPlanet].class}</span>
+                <p className="text-white/20 font-mono text-[8px] sm:text-[10px] uppercase tracking-[0.2em] sm:tracking-[0.4em]">Status: Signal_Lock</p>
               </div>
             </header>
 
             {/* Scientific Breakdown Section */}
-            <div className="mb-16">
-              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-6 border-b border-white/5 pb-2">Technical Summary</h3>
-              <p className="text-xl md:text-2xl font-mono leading-relaxed text-gray-300">
-                {typewriter}<span className="inline-block w-4 h-8 bg-blue-500 ml-2 animate-pulse" />
+            <div className="mb-8 sm:mb-16">
+              <h3 className="text-[9px] sm:text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-4 sm:mb-6 border-b border-white/5 pb-2">Technical Summary</h3>
+              <p className="text-lg sm:text-xl md:text-2xl font-mono leading-relaxed text-gray-300">
+                {typewriter}<span className="inline-block w-3 h-6 sm:w-4 sm:h-8 bg-blue-500 ml-2 animate-pulse" />
               </p>
             </div>
 
             {/* Detailed Physics Grid */}
-            <div className="mb-16">
-              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-8 border-b border-white/5 pb-2">Planetary Physics</h3>
-              <div className="grid grid-cols-2 gap-6">
+            <div className="mb-8 sm:mb-16">
+              <h3 className="text-[9px] sm:text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-6 sm:mb-8 border-b border-white/5 pb-2">Planetary Physics</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {Object.entries(PLANET_INFO[selectedPlanet].stats).map(([k, v]) => (
-                  <div key={k} className="bg-white/[0.02] p-8 rounded-[40px] border border-white/5 group hover:border-blue-500/40 transition-all">
-                    <p className="text-[9px] uppercase tracking-[0.4em] text-gray-600 mb-2 font-bold">{k}</p>
-                    <p className="text-2xl font-black">{v}</p>
+                  <div key={k} className="bg-white/[0.02] p-6 sm:p-8 rounded-[30px] sm:rounded-[40px] border border-white/5 group hover:border-blue-500/40 transition-all">
+                    <p className="text-[8px] sm:text-[9px] uppercase tracking-[0.4em] text-gray-600 mb-1 sm:mb-2 font-bold">{k}</p>
+                    <p className="text-xl sm:text-2xl font-black">{v}</p>
                   </div>
                 ))}
               </div>
@@ -662,29 +663,29 @@ export default function SolarSystemExplorer() {
             </div>
 
             {/* Orbital Vectors */}
-            <div className="mb-16">
-              <h3 className="text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-8 border-b border-white/5 pb-2">Orbital Dynamics</h3>
-              <div className="grid grid-cols-3 gap-4">
+            <div className="mb-8 sm:mb-16">
+              <h3 className="text-[9px] sm:text-[10px] font-black tracking-[0.5em] text-white/30 uppercase mb-6 sm:mb-8 border-b border-white/5 pb-2">Orbital Dynamics</h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {Object.entries(PLANET_INFO[selectedPlanet].mechanics).map(([k, v]) => (
-                  <div key={k} className="text-center">
-                    <p className="text-[8px] text-gray-600 uppercase mb-1">{k}</p>
-                    <p className="text-[11px] font-mono font-bold text-white/80">{v}</p>
+                  <div key={k} className="text-center p-3 bg-white/5 rounded-2xl sm:bg-transparent sm:p-0">
+                    <p className="text-[7px] sm:text-[8px] text-gray-600 uppercase mb-1 font-bold">{k}</p>
+                    <p className="text-[10px] sm:text-[11px] font-mono font-bold text-white/80">{v}</p>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Action Interface */}
-            <div className="flex gap-4 mt-auto pt-10">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-auto pt-10 pb-8 sm:pb-0">
               <button
                 onClick={handleSpeak}
-                className={`flex-1 py-8 rounded-[50px] font-black uppercase text-[12px] tracking-[0.3em] transition-all flex items-center justify-center gap-4 ${isSpeaking ? 'bg-red-600 shadow-2xl shadow-red-600/40' : 'bg-blue-600 hover:bg-blue-500'}`}
+                className={`flex-1 py-5 sm:py-8 rounded-[50px] font-black uppercase text-[10px] sm:text-[12px] tracking-[0.3em] transition-all flex items-center justify-center gap-3 sm:gap-4 ${isSpeaking ? 'bg-red-600 shadow-2xl shadow-red-600/40' : 'bg-blue-600 hover:bg-blue-500'}`}
               >
                 {isSpeaking ? 'Kill_Audio' : 'Neural_Voice_Sync'}
               </button>
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="px-12 py-8 bg-white/[0.04] hover:bg-white/10 rounded-[50px] border border-white/10 transition-all uppercase text-[11px] font-black tracking-[0.4em]"
+                className="px-8 sm:px-12 py-5 sm:py-8 bg-white/[0.04] hover:bg-white/10 rounded-[50px] border border-white/10 transition-all uppercase text-[9px] sm:text-[11px] font-black tracking-[0.4em]"
               >
                 Close
               </button>
