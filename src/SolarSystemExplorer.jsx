@@ -18,7 +18,8 @@ import { createSpacetimeGrid } from './components/visuals/SpacetimeGrid';
 
 import { PLANET_INFO, PLANET_CONFIG, MISSION_DATA } from './data';
 import DeepDiveOverlay from './components/overlays/DeepDiveOverlay';
-import { Microscope } from 'lucide-react';
+import MissionsPage from './pages/MissionsPage';
+import { Microscope, Rocket } from 'lucide-react';
 
 
 export default function SolarSystemExplorer() {
@@ -48,6 +49,7 @@ export default function SolarSystemExplorer() {
   const [isHUDOpen, setIsHUDOpen] = useState(window.innerWidth > 768);
   const [isSystemOpen, setIsSystemOpen] = useState(false);
   const [isImmersive, setIsImmersive] = useState(false);
+  const [showMissionsPage, setShowMissionsPage] = useState(false);
 
   // Phase 4 Deep Dive Expansion States
   const [isExploringMore, setIsExploringMore] = useState(false);
@@ -203,8 +205,10 @@ export default function SolarSystemExplorer() {
       starGeom.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
       scene.add(new THREE.Points(starGeom, new THREE.PointsMaterial({ color: 0xffffff, size: 0.8, transparent: true, opacity: 0.6 })));
 
-      // Dynamic Mission Objects
+      // Dynamic Mission Objects (only render missions with path data)
       MISSION_DATA.forEach(m => {
+        if (!m.path || !Array.isArray(m.path)) return; // Skip missions without 3D path data
+
         const points = m.path.map(p => new THREE.Vector3(...p));
         const curve = new THREE.CatmullRomCurve3(points);
         const geo = new THREE.BufferGeometry().setFromPoints(curve.getPoints(100));
@@ -747,14 +751,19 @@ export default function SolarSystemExplorer() {
             <div className="h-[1px] bg-white/5 my-1" />
 
 
+            {/* MISSIONS PAGE BUTTON */}
+            <button
+              onClick={() => setShowMissionsPage(true)}
+              className="w-full px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500 flex items-center justify-center gap-2"
+            >
+              <Rocket size={12} />
+              MISSION_CONTROL
+            </button>
+
+            <div className="h-[1px] bg-white/5 my-1" />
+
             {/* Toggles Grid */}
             <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => setShowMissions(!showMissions)}
-                className={`px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all ${showMissions ? 'bg-green-500/20 border-green-500 text-green-400' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
-              >
-                MISSIONS
-              </button>
               <button
                 onClick={() => setIsCameraStabilized(!isCameraStabilized)}
                 className={`px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all ${isCameraStabilized ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
@@ -1022,6 +1031,10 @@ export default function SolarSystemExplorer() {
             setIsGravityView={setIsGravityView}
             isRoverView={isRoverView}
             setIsRoverView={setIsRoverView}
+            onOpenMissions={() => {
+              setIsExploringMore(false);
+              setShowMissionsPage(true);
+            }}
             onClose={() => {
               setIsExploringMore(false);
               setActiveLandmark(null);
@@ -1034,6 +1047,11 @@ export default function SolarSystemExplorer() {
           />
         )
       }
+
+      {/* MISSIONS PAGE OVERLAY */}
+      {showMissionsPage && (
+        <MissionsPage onClose={() => setShowMissionsPage(false)} />
+      )}
 
       <style>{`
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }

@@ -1,10 +1,11 @@
 import React, { useState, useRef } from 'react';
-import { Crosshair, Wind, Map, ArrowLeft, Activity, Layers, Zap, Magnet, BookOpen, Microscope, Radio, ChevronDown, Rocket } from 'lucide-react';
+import { Crosshair, Wind, Map, ArrowLeft, Activity, Layers, Zap, Magnet, BookOpen, Microscope, Radio, ChevronDown, Rocket, ExternalLink } from 'lucide-react';
 import { PLANET_INFO, MISSION_DATA } from '../../data';
 
 export default function DeepDiveOverlay({
     planetName,
     onClose,
+    onOpenMissions,
     activeModule,
     setActiveModule,
     activeLandmark,
@@ -278,41 +279,53 @@ export default function DeepDiveOverlay({
                                 </section>
                             )}
 
-                            {/* MISSIONS SECTION */}
+                            {/* MISSIONS SECTION - TEASER CARDS */}
                             {planetMissions.length > 0 && (
                                 <section ref={sectionRefs['Missions']} className="animate-in fade-in duration-500 delay-400">
-                                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
-                                        <div className="w-4 sm:w-6 h-[2px] bg-red-500" />
-                                        <Rocket size={12} className="text-red-400 sm:w-3.5 sm:h-3.5" />
-                                        <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-red-400">Human Missions</h4>
+                                    <div className="flex items-center justify-between gap-2 sm:gap-3 mb-2 sm:mb-3">
+                                        <div className="flex items-center gap-2 sm:gap-3">
+                                            <div className="w-4 sm:w-6 h-[2px] bg-red-500" />
+                                            <Rocket size={12} className="text-red-400 sm:w-3.5 sm:h-3.5" />
+                                            <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-widest text-red-400">Human Missions</h4>
+                                        </div>
+                                        {onOpenMissions && (
+                                            <button
+                                                onClick={onOpenMissions}
+                                                className="text-[9px] text-red-400/60 hover:text-red-400 flex items-center gap-1 uppercase tracking-wider transition-all"
+                                            >
+                                                View All <ExternalLink size={10} />
+                                            </button>
+                                        )}
                                     </div>
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 bg-black/40 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl border border-white/5">
-                                        {planetMissions.map((mission, idx) => (
-                                            <div key={mission?.name || idx} className="p-3 sm:p-4 bg-white/5 rounded-lg border border-white/5 hover:border-red-500/30 transition-all group">
-                                                <div className="flex items-start justify-between mb-2">
-                                                    <div>
-                                                        <h5 className="text-xs sm:text-sm font-bold text-white group-hover:text-red-300 transition-all">{mission?.name || 'Unknown Mission'}</h5>
-                                                        <div className="flex items-center gap-2 mt-1">
-                                                            <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider text-white/40">{mission?.agency || 'Unknown'}</span>
-                                                            <span className="text-[8px] sm:text-[9px] text-white/30">•</span>
-                                                            <span className="text-[8px] sm:text-[9px] font-bold text-white/40">{mission?.launch || 'N/A'}</span>
-                                                        </div>
-                                                    </div>
-                                                    <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-wider px-1.5 sm:px-2 py-0.5 rounded-full ${mission?.status === 'Active' ? 'bg-green-500/20 text-green-400' : mission?.status === 'Success' ? 'bg-cyan-500/20 text-cyan-400' : 'bg-white/10 text-white/50'}`}>
+                                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 bg-black/40 p-3 sm:p-4 lg:p-5 rounded-lg sm:rounded-xl border border-white/5">
+                                        {planetMissions.slice(0, 8).map((mission, idx) => (
+                                            <div
+                                                key={mission?.name || idx}
+                                                className="p-2 sm:p-3 bg-white/5 rounded-lg border border-white/5 hover:border-red-500/30 transition-all cursor-pointer group"
+                                                onClick={onOpenMissions}
+                                            >
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className={`text-[7px] sm:text-[8px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded-full ${mission?.status === 'Active' ? 'bg-green-500/20 text-green-400' : mission?.status === 'Success' ? 'bg-cyan-500/20 text-cyan-400' : mission?.status === 'Historic' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-white/10 text-white/50'}`}>
                                                         {mission?.status || 'Unknown'}
                                                     </span>
                                                 </div>
-                                                {mission?.description && (
-                                                    <p className="text-[10px] sm:text-[11px] text-white/60 leading-relaxed mb-2">{mission.description}</p>
-                                                )}
-                                                {mission?.scientific_goal && (
-                                                    <div className="text-[9px] sm:text-[10px] text-white/40 italic border-t border-white/5 pt-2 mt-2">
-                                                        <span className="text-red-400/60 font-bold">Goal:</span> {mission.scientific_goal}
-                                                    </div>
-                                                )}
+                                                <h5 className="text-[10px] sm:text-xs font-bold text-white group-hover:text-red-300 transition-all truncate">{mission?.name || 'Unknown'}</h5>
+                                                <div className="flex items-center gap-2 mt-1 text-[8px] text-white/40">
+                                                    <span className="font-bold" style={{ color: mission?.color }}>{mission?.agency}</span>
+                                                    <span>•</span>
+                                                    <span>{mission?.launch}</span>
+                                                </div>
                                             </div>
                                         ))}
                                     </div>
+                                    {planetMissions.length > 8 && onOpenMissions && (
+                                        <button
+                                            onClick={onOpenMissions}
+                                            className="mt-3 w-full py-2 text-[9px] font-bold uppercase tracking-widest text-red-400/60 hover:text-red-400 border border-white/5 hover:border-red-500/30 rounded-lg transition-all flex items-center justify-center gap-2"
+                                        >
+                                            View {planetMissions.length - 8} more missions <ExternalLink size={10} />
+                                        </button>
+                                    )}
                                 </section>
                             )}
                         </div>
