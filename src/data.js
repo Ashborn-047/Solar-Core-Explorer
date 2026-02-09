@@ -355,190 +355,14 @@ export const PLANET_CONFIG = [
     { name: 'Pluto', dist: 270, size: 0.8, speed: 0.06 }
 ];
 
-export const MISSION_DATA = [
-    // ===================== LUNAR EXPLORATION =====================
-    {
-        name: 'Luna 2',
-        agency: 'USSR',
-        color: '#cc0000',
-        target: 'Moon',
-        launch: '1959',
-        status: 'Historic',
-        description: 'First human-made object to reach the surface of the Moon.',
-        scientific_goal: 'Prove that spacecraft could reach and impact the lunar surface.',
-        importance: 'Opened the space race and demonstrated Soviet space supremacy.',
-        image: '/assets/missions/luna2.webp'
-    },
-    {
-        name: 'Apollo 11',
-        agency: 'NASA',
-        color: '#0066cc',
-        target: 'Moon',
-        launch: '1969',
-        status: 'Historic',
-        description: 'First crewed mission to land on the Moon. Neil Armstrong and Buzz Aldrin became the first humans to walk on another world.',
-        scientific_goal: 'Perform a crewed lunar landing and return safely to Earth.',
-        importance: 'The defining achievement of human spaceflight. "One small step for man..."',
-        image: '/assets/missions/apollo11.webp'
-    },
-    {
-        name: 'Apollo 13',
-        agency: 'NASA',
-        color: '#0066cc',
-        target: 'Moon',
-        launch: '1970',
-        status: 'Historic',
-        description: 'Lunar mission aborted after an oxygen tank exploded. Crew returned safely in a dramatic rescue.',
-        scientific_goal: 'Perform third crewed lunar landing.',
-        importance: '"Houston, we\'ve had a problem." A testament to human ingenuity and teamwork.',
-        image: '/assets/missions/apollo13.webp'
-    },
-    {
-        name: 'LRO',
-        agency: 'NASA',
-        color: '#00aaff',
-        target: 'Moon',
-        launch: '2009',
-        status: 'Active',
-        description: 'Lunar Reconnaissance Orbiter, mapping the Moon in unprecedented detail.',
-        scientific_goal: 'Identify safe landing sites and locate potential resources.',
-        importance: 'Foundation for Artemis program landing site selection.',
-        image: '/assets/missions/lro.webp'
-    },
-    {
-        name: 'Chang\'e 4',
-        agency: 'CNSA',
-        color: '#ffcc00',
-        target: 'Moon',
-        launch: '2019',
-        status: 'Active',
-        description: 'First mission to land on the far side of the Moon.',
-        scientific_goal: 'Explore the Von Kármán crater and conduct radio astronomy experiments.',
-        importance: 'Historic first: No spacecraft had ever landed on the lunar far side.',
-        image: '/assets/missions/change4.webp'
-    },
-    {
-        name: 'Chandrayaan-1',
-        agency: 'ISRO',
-        color: '#ff9933',
-        target: 'Moon',
-        launch: '2008',
-        status: 'Completed',
-        description: 'India\'s first lunar probe. Discovered water molecules on the Moon.',
-        scientific_goal: 'Map the lunar surface and search for water ice.',
-        importance: 'Confirmed the presence of water on the Moon, reshaping lunar science.',
-        image: '/assets/missions/chandrayaan1.webp'
-    },
-    {
-        name: 'Chandrayaan-3',
-        agency: 'ISRO',
-        color: '#ff9933',
-        target: 'Moon',
-        launch: '2023',
-        status: 'Success',
-        description: 'First mission to soft-land near the lunar south pole.',
-        scientific_goal: 'Analyze lunar soil (Regolith) and detect water ice in permanently shadowed regions.',
-        importance: 'Secured India\'s place as a global lunar explorer. Fourth nation to soft-land on the Moon.',
-        image: '/assets/missions/chandrayaan3.webp'
-    },
-    {
-        name: 'Artemis I',
-        agency: 'NASA',
-        color: '#00aaff',
-        target: 'Moon',
-        launch: '2022',
-        status: 'Success',
-        description: 'Uncrewed test flight of the Space Launch System and Orion spacecraft.',
-        scientific_goal: 'Validate deep space systems for crewed Artemis missions.',
-        importance: 'First step in NASA\'s plan to return humans to the Moon.',
-        image: '/assets/missions/artemis1.webp'
-    },
+// Import modular mission data
+import { ALL_MISSIONS } from './data/missions/index.js';
 
-    // ===================== MARS MISSIONS =====================
-    {
-        name: 'Viking 1',
-        agency: 'NASA',
-        color: '#cc4400',
-        target: 'Mars',
-        launch: '1975',
-        status: 'Historic',
-        description: 'First spacecraft to successfully land on Mars and transmit images from the surface.',
-        scientific_goal: 'Search for signs of life and study Martian weather.',
-        importance: 'The images of a rust-red Martian landscape captivated the world.',
-        image: '/assets/missions/viking1.webp'
-    },
-    {
-        name: 'Mars Pathfinder',
-        agency: 'NASA',
-        color: '#cc4400',
-        target: 'Mars',
-        launch: '1996',
-        status: 'Completed',
-        description: 'Delivered the Sojourner rover, the first wheeled vehicle on another planet.',
-        scientific_goal: 'Demonstrate low-cost landing technology and analyze Martian rocks.',
-        importance: 'Proved that affordable Mars exploration was possible.',
-        image: '/assets/missions/pathfinder.webp'
-    },
-    {
-        name: 'Spirit',
-        agency: 'NASA',
-        color: '#cc4400',
-        target: 'Mars',
-        launch: '2004',
-        status: 'Completed',
-        description: 'Mars Exploration Rover that operated for 6 years, far exceeding its 90-day mission.',
-        scientific_goal: 'Search for evidence of past water activity.',
-        importance: 'Found strong evidence Mars once had liquid water.',
-        image: '/assets/missions/spirit.webp'
-    },
-    {
-        name: 'Opportunity',
-        agency: 'NASA',
-        color: '#cc4400',
-        target: 'Mars',
-        launch: '2004',
-        status: 'Completed',
-        description: 'Mars Exploration Rover that set the off-Earth roving distance record (45 km).',
-        scientific_goal: 'Study Martian geology and past water environments.',
-        importance: 'Operated for nearly 15 years. Last message: "My battery is low and it\'s getting dark."',
-        image: '/assets/missions/opportunity.webp'
-    },
-    {
-        name: 'Curiosity',
-        agency: 'NASA',
-        color: '#00aaff',
-        target: 'Mars',
-        launch: '2012',
-        status: 'Active',
-        description: 'Car-sized rover exploring Gale Crater. Still operational after 12+ years.',
-        scientific_goal: 'Investigate Mars\' climate and geology; assess habitability.',
-        importance: 'Confirmed ancient Mars could have supported microbial life.',
-        image: '/assets/missions/curiosity.webp'
-    },
-    {
-        name: 'Perseverance',
-        agency: 'NASA',
-        color: '#00aaff',
-        target: 'Mars',
-        launch: '2021',
-        status: 'Active',
-        description: 'Most advanced rover ever sent to Mars. Carries the Ingenuity helicopter.',
-        scientific_goal: 'Search for signs of ancient life and cache samples for Earth return.',
-        importance: 'Ingenuity achieved first powered flight on another planet.',
-        image: '/assets/missions/perseverance.webp'
-    },
-    {
-        name: 'Mangalyaan (MOM)',
-        agency: 'ISRO',
-        color: '#ff9933',
-        target: 'Mars',
-        launch: '2013',
-        status: 'Completed',
-        description: 'India\'s first interplanetary mission; reached Mars orbit on maiden attempt.',
-        scientific_goal: 'Identify methane and atmospheric composition to search for signs of past life.',
-        importance: 'Most cost-effective interplanetary mission in history ($74 million).',
-        image: '/assets/missions/mangalyaan.webp'
-    },
+// Re-export for backward compatibility
+// This combines the new modular missions with any remaining inline missions
+export const MISSION_DATA = [
+    ...ALL_MISSIONS,
+    // ===================== ADDITIONAL MARS MISSIONS (to be migrated) =====================
     {
         name: 'Mars Express',
         agency: 'ESA',
@@ -546,7 +370,7 @@ export const MISSION_DATA = [
         target: 'Mars',
         launch: '2003',
         status: 'Active',
-        description: 'ESA\'s first planetary mission. Still orbiting Mars after 20+ years.',
+        description: "ESA's first planetary mission. Still orbiting Mars after 20+ years.",
         scientific_goal: 'Map the Martian surface and study the atmosphere.',
         importance: 'Longest-serving Mars orbiter. Discovered subsurface water ice.',
         image: '/assets/missions/marsexpress.webp'
@@ -558,7 +382,7 @@ export const MISSION_DATA = [
         target: 'Mars',
         launch: '2020',
         status: 'Active',
-        description: 'China\'s first Mars mission with orbiter, lander, and Zhurong rover.',
+        description: "China's first Mars mission with orbiter, lander, and Zhurong rover.",
         scientific_goal: 'Map Martian geological structures and surface soil characteristics.',
         importance: 'China became the second nation to successfully operate a rover on Mars.',
         image: '/assets/missions/tianwen1.webp'
@@ -570,13 +394,13 @@ export const MISSION_DATA = [
         target: 'Mars',
         launch: '2020',
         status: 'Active',
-        description: 'UAE\'s first interplanetary mission studying Martian weather.',
+        description: "UAE's first interplanetary mission studying Martian weather.",
         scientific_goal: 'Study the Martian atmosphere and climate dynamics.',
         importance: 'First Arab nation to reach Mars. Inspiring a new generation.',
         image: '/assets/missions/hope.webp'
     },
 
-    // ===================== OUTER GIANTS =====================
+    // ===================== OUTER GIANTS (to be migrated) =====================
     {
         name: 'Pioneer 10',
         agency: 'NASA',
@@ -585,7 +409,7 @@ export const MISSION_DATA = [
         launch: '1972',
         status: 'Historic',
         description: 'First spacecraft to travel through the asteroid belt and make a flyby of Jupiter.',
-        scientific_goal: 'Study Jupiter\'s atmosphere and magnetic field.',
+        scientific_goal: "Study Jupiter's atmosphere and magnetic field.",
         importance: 'Proved safe passage through the asteroid belt was possible.',
         image: '/assets/missions/pioneer10.webp'
     },
@@ -598,32 +422,8 @@ export const MISSION_DATA = [
         status: 'Historic',
         description: 'First spacecraft to fly by Saturn and study its rings.',
         scientific_goal: 'Study Saturn and its moons.',
-        importance: 'Discovered Saturn\'s F ring and a new moon.',
+        importance: "Discovered Saturn's F ring and a new moon.",
         image: '/assets/missions/pioneer11.webp'
-    },
-    {
-        name: 'Voyager 1',
-        agency: 'NASA',
-        color: '#ff4444',
-        target: 'Interstellar Space',
-        launch: '1977',
-        status: 'Active',
-        description: 'First spacecraft to cross the heliopause. Carries the Golden Record.',
-        scientific_goal: 'Study the outer Solar System and interstellar medium.',
-        importance: 'Humanity\'s furthest ambassador. Now over 24 billion km from Earth.',
-        image: '/assets/missions/voyager1.webp'
-    },
-    {
-        name: 'Voyager 2',
-        agency: 'NASA',
-        color: '#ff6666',
-        target: 'Neptune',
-        launch: '1977',
-        status: 'Active',
-        description: 'Only spacecraft to have visited Uranus and Neptune.',
-        scientific_goal: 'Conduct close-up studies of all four gas giants.',
-        importance: 'Provided the only close-up images of Uranus and Neptune.',
-        image: '/assets/missions/voyager2.webp'
     },
     {
         name: 'Galileo',
@@ -638,42 +438,6 @@ export const MISSION_DATA = [
         image: '/assets/missions/galileo.webp'
     },
     {
-        name: 'Cassini-Huygens',
-        agency: 'NASA/ESA',
-        color: '#ffaa00',
-        target: 'Saturn',
-        launch: '1997',
-        status: 'Completed',
-        description: 'Orbited Saturn for 13 years. Huygens probe landed on Titan.',
-        scientific_goal: 'Study Saturn, its rings, and moons in unprecedented detail.',
-        importance: 'Revealed Titan\'s methane lakes and Enceladus\' water plumes.',
-        image: '/assets/missions/cassini.webp'
-    },
-    {
-        name: 'New Horizons',
-        agency: 'NASA',
-        color: '#66ccff',
-        target: 'Pluto',
-        launch: '2006',
-        status: 'Active',
-        description: 'First spacecraft to fly by Pluto and a Kuiper Belt object (Arrokoth).',
-        scientific_goal: 'Study Pluto, its moons, and the Kuiper Belt.',
-        importance: 'Revealed Pluto\'s heart-shaped glacier and complex geology.',
-        image: '/assets/missions/newhorizons.webp'
-    },
-    {
-        name: 'Juno',
-        agency: 'NASA',
-        color: '#00ccff',
-        target: 'Jupiter',
-        launch: '2011',
-        status: 'Active',
-        description: 'Solar-powered orbiter studying Jupiter\'s composition and magnetic field.',
-        scientific_goal: 'Understand Jupiter\'s origin, interior structure, and atmosphere.',
-        importance: 'Captured stunning images of Jupiter\'s storms and polar regions.',
-        image: '/assets/missions/juno.webp'
-    },
-    {
         name: 'JUICE',
         agency: 'ESA',
         color: '#4488ff',
@@ -682,7 +446,7 @@ export const MISSION_DATA = [
         status: 'Active',
         description: 'Jupiter Icy Moons Explorer, en route to study Ganymede, Europa, and Callisto.',
         scientific_goal: 'Characterize the Jovian moons as potential habitats for life.',
-        importance: 'Will be the first spacecraft to orbit a moon other than Earth\'s.',
+        importance: "Will be the first spacecraft to orbit a moon other than Earth's.",
         image: '/assets/missions/juice.webp'
     },
 

@@ -19,6 +19,7 @@ import { createSpacetimeGrid } from './components/visuals/SpacetimeGrid';
 import { PLANET_INFO, PLANET_CONFIG, MISSION_DATA } from './data';
 import DeepDiveOverlay from './components/overlays/DeepDiveOverlay';
 import MissionsPage from './pages/MissionsPage';
+import TopNavBar from './components/ui/TopNavBar';
 import { Microscope, Rocket } from 'lucide-react';
 
 
@@ -586,11 +587,23 @@ export default function SolarSystemExplorer() {
       {/* IMMERSIVE MODE TOGGLE */}
       <button
         onClick={() => setIsImmersive(!isImmersive)}
-        className="absolute top-4 right-4 z-[10003] p-2 bg-black/60 border border-white/20 rounded-full hover:bg-white/10 transition-all text-white/50 hover:text-white"
+        className="absolute top-4 right-4 z-[10003] p-2 bg-black/60 border border-white/20 rounded-full hover:bg-white/10 transition-all text-white/50 hover:text-white sm:top-[72px]"
         title="Toggle Immersive Mode"
       >
         <div className={`w-3 h-3 rounded-full ${isImmersive ? 'bg-green-500 shadow-[0_0_10px_#00ff00]' : 'border border-white/50'}`} />
       </button>
+
+      {/* TOP NAVIGATION BAR */}
+      <TopNavBar
+        timeScale={timeScale}
+        setTimeScale={setTimeScale}
+        lensMode={lensMode}
+        setLensMode={setLensMode}
+        audioEnabled={audioEnabled}
+        setAudioEnabled={setAudioEnabled}
+        onOpenMissions={() => setShowMissionsPage(true)}
+        isImmersive={isImmersive}
+      />
 
       {/* CONSOLIDATED SYSTEM STATUS (TOP LEFT) */}
       {!isImmersive && (
@@ -705,96 +718,12 @@ export default function SolarSystemExplorer() {
           style={{ background: 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))', backgroundSize: '100% 4px, 3px 100%' }} />
       )}
 
-      {/* GLOBAL HUD COMMAND SLATE - Repositioned to the left to avoid overlapping info cards */}
-      {!isImmersive && (
+      {/* OLD FLOATING HUD - Hidden, replaced by TopNavBar */}
+      {false && !isImmersive && (
         <>
           <div className={`absolute bottom-8 left-8 z-50 flex flex-col gap-4 p-6 bg-[#050508]/90 border border-white/10 backdrop-blur-3xl rounded-3xl w-72 transition-all duration-700 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)] ${isHUDOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12 pointer-events-none'}`}>
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <div className="text-[10px] tracking-[0.3em] text-cyan-500 uppercase font-black">Command_Unit</div>
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse" />
-              </div>
-              <button
-                onClick={() => setIsHUDOpen(false)}
-                className="p-1.5 hover:bg-white/10 rounded-lg transition-all text-white/30 hover:text-white"
-              >
-                <div className="w-3 h-[1px] bg-current" />
-              </button>
-            </div>
-
-            {/* Time Scale Controller */}
-            <div className="space-y-3 p-4 bg-white/5 rounded-2xl border border-white/5">
-              <div className="flex justify-between text-[10px] font-black tracking-widest text-white/40">
-                <span>TEMPORAL_DRIFT</span>
-                <span className="text-cyan-400">{timeScale.toFixed(1)}x</span>
-              </div>
-              <input
-                type="range" min="-10" max="100" step="0.5" value={timeScale}
-                onChange={(e) => setTimeScale(parseFloat(e.target.value))}
-                className="w-full appearance-none bg-cyan-900/40 h-1.5 rounded-full outline-none accent-cyan-400 cursor-pointer"
-              />
-            </div>
-
-            {/* Lens Mode Switcher */}
-            <div className="grid grid-cols-2 gap-2">
-              {['normal', 'thermal', 'xray', 'retro'].map(mode => (
-                <button
-                  key={mode}
-                  onClick={() => setLensMode(mode)}
-                  className={`py-2 text-[8px] font-black rounded-lg border transition-all uppercase tracking-widest ${lensMode === mode ? 'bg-cyan-500 text-black border-cyan-400' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
-                >
-                  {mode}
-                </button>
-              ))}
-            </div>
-
-            <div className="h-[1px] bg-white/5 my-1" />
-
-
-            {/* MISSIONS PAGE BUTTON */}
-            <button
-              onClick={() => setShowMissionsPage(true)}
-              className="w-full px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all bg-red-500/10 border-red-500/30 text-red-400 hover:bg-red-500/20 hover:border-red-500 flex items-center justify-center gap-2"
-            >
-              <Rocket size={12} />
-              MISSION_CONTROL
-            </button>
-
-            <div className="h-[1px] bg-white/5 my-1" />
-
-            {/* Toggles Grid */}
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                onClick={() => setIsCameraStabilized(!isCameraStabilized)}
-                className={`px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all ${isCameraStabilized ? 'bg-orange-500/20 border-orange-500 text-orange-400' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
-              >
-                STABLE_CAM
-              </button>
-              <button
-                onClick={() => setAudioEnabled(!audioEnabled)}
-                className={`px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all ${audioEnabled ? 'bg-purple-500/20 border-purple-500 text-purple-400' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
-              >
-                AUDIO_{audioEnabled ? 'ON' : 'OFF'}
-              </button>
-              <button
-                onClick={() => setIsLabMode(!isLabMode)}
-                className={`px-3 py-3 text-[9px] font-black tracking-widest rounded-xl border transition-all ${isLabMode ? 'bg-yellow-500/20 border-yellow-400 text-yellow-500' : 'bg-white/5 border-white/5 text-white/30 hover:text-white/60'}`}
-              >
-                LAB_LINK
-              </button>
-            </div>
+            {/* ... HUD content hidden ... */}
           </div>
-
-          {/* Persistent Restore Button (when HUD is closed) */}
-          {!isHUDOpen && (
-            <button
-              onClick={() => setIsHUDOpen(true)}
-              className="absolute bottom-8 left-8 z-50 p-4 bg-[#050508]/80 border border-cyan-500/30 backdrop-blur-xl rounded-2xl flex items-center gap-3 text-cyan-500 hover:bg-cyan-500/10 transition-all animate-in slide-in-from-left-4 duration-500 shadow-2xl group"
-            >
-              <div className="w-2 h-2 rounded-full bg-cyan-500 group-hover:animate-ping" />
-              <span className="text-[10px] font-black tracking-[0.4em] uppercase">Open_Command_Deck</span>
-            </button>
-          )}
         </>
       )}
 
@@ -831,10 +760,11 @@ export default function SolarSystemExplorer() {
 
       <div className="absolute inset-0 pointer-events-none shadow-[inset_0_0_200px_rgba(0,0,0,1)]" />
 
-      {/* Primary Header */}
+      {/* Primary Header - HIDDEN: Branding now in TopNavBar */}
+      {/* 
       {
         !selectedPlanet && !isImmersive && (
-          <div className="absolute top-16 left-4 sm:top-20 sm:left-16 pointer-events-none z-10 transition-all">
+          <div className="absolute top-20 left-4 sm:top-24 sm:left-16 pointer-events-none z-10 transition-all">
             <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-6">
               <div className="w-2 h-2 sm:w-3 sm:h-3 bg-blue-500 rounded-full animate-ping" />
               <span className="text-[8px] sm:text-[11px] font-mono tracking-[0.4em] sm:tracking-[1em] text-blue-400 uppercase">System_Wide_Scan</span>
@@ -844,6 +774,7 @@ export default function SolarSystemExplorer() {
           </div>
         )
       }
+      */}
 
       {/* Interaction Cursor Tag */}
       {

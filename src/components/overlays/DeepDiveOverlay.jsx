@@ -126,7 +126,7 @@ export default function DeepDiveOverlay({
             <div className="flex-1 relative flex overflow-hidden pointer-events-auto">
                 <div className="w-full h-full flex flex-col overflow-hidden px-3 sm:px-6 lg:px-8 xl:px-12">
                     {/* HORIZONTAL COMMAND BAR - Scrollable on mobile */}
-                    <div className="flex-none py-2 sm:py-3 mb-2 sm:mb-3 flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar border-b border-white/5">
+                    <div className="flex-none py-2 sm:py-3 mb-2 sm:mb-3 flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar border-b border-white/5 relative z-10">
                         {modules.map(mod => (
                             <button
                                 key={mod.id}

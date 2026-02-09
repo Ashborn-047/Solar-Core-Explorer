@@ -26,6 +26,75 @@ const STATUS_STYLES = {
 // Get unique values from missions
 const getUniqueValues = (key) => [...new Set(MISSION_DATA.map(m => m[key]))].filter(Boolean).sort();
 
+// Mission Image Component with skeleton loading
+function MissionImage({ src, alt, color, size = 'sm', className = '' }) {
+    const [isLoaded, setIsLoaded] = React.useState(false);
+    const [hasError, setHasError] = React.useState(false);
+
+    const sizeClasses = {
+        sm: 'h-24',
+        lg: 'h-48 sm:h-64 lg:h-80'
+    };
+
+    const iconSize = size === 'lg' ? 64 : 28;
+
+    return (
+        <div
+            className={`${sizeClasses[size]} rounded-lg flex items-center justify-center relative overflow-hidden ${className}`}
+            style={{
+                background: `linear-gradient(135deg, ${color}30 0%, ${color}10 50%, transparent 100%)`
+            }}
+        >
+            {/* Animated background pattern for empty state */}
+            {(!src || hasError) && (
+                <>
+                    <div
+                        className="absolute inset-0 opacity-20"
+                        style={{
+                            backgroundImage: `radial-gradient(circle at 20% 80%, ${color}40 0%, transparent 50%), 
+                                            radial-gradient(circle at 80% 20%, ${color}30 0%, transparent 40%)`
+                        }}
+                    />
+                    <div className="absolute top-2 right-2 w-1 h-1 rounded-full animate-pulse" style={{ backgroundColor: color }} />
+                    <div className="absolute bottom-4 left-4 w-0.5 h-8 rounded-full opacity-30" style={{ backgroundColor: color }} />
+                </>
+            )}
+
+            {/* Skeleton loader */}
+            {!isLoaded && !hasError && src && (
+                <div className="absolute inset-0 skeleton" />
+            )}
+
+            {/* Actual image */}
+            {src && !hasError && (
+                <img
+                    src={src}
+                    alt={alt}
+                    className={`w-full h-full object-cover transition-opacity duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                    onLoad={() => setIsLoaded(true)}
+                    onError={() => setHasError(true)}
+                />
+            )}
+
+            {/* Fallback icon with glow */}
+            {(!src || hasError) && (
+                <div className="flex flex-col items-center gap-2">
+                    <Rocket
+                        size={iconSize}
+                        style={{ color, filter: `drop-shadow(0 0 10px ${color}50)` }}
+                        className="opacity-60 animate-pulse"
+                    />
+                    {size === 'lg' && (
+                        <span className="text-[9px] uppercase tracking-widest opacity-40" style={{ color }}>
+                            Mission Visual
+                        </span>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
 export default function MissionsPage({ onClose }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedAgency, setSelectedAgency] = useState('All');
@@ -160,8 +229,8 @@ export default function MissionsPage({ onClose }) {
             {/* MAIN CONTENT */}
             <main className="flex-1 overflow-y-auto px-4 sm:px-6 lg:px-8 py-6">
                 {selectedMission ? (
-                    // DETAIL VIEW
-                    <div className="max-w-4xl mx-auto animate-in fade-in duration-500">
+                    // DETAIL VIEW - Expanded
+                    <div className="max-w-5xl mx-auto animate-in fade-in duration-500">
                         <button
                             onClick={() => setSelectedMission(null)}
                             className="mb-6 flex items-center gap-2 text-sm text-white/40 hover:text-white transition-all"
@@ -169,59 +238,215 @@ export default function MissionsPage({ onClose }) {
                             <ArrowLeft size={14} /> Back to Gallery
                         </button>
 
-                        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden">
-                            {/* Mission Image Placeholder */}
-                            <div
-                                className="h-48 sm:h-64 lg:h-80 relative flex items-center justify-center"
-                                style={{ backgroundColor: selectedMission.color + '20' }}
-                            >
-                                <Rocket size={80} style={{ color: selectedMission.color }} className="opacity-30" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#050508] to-transparent" />
+                        {/* Hero Section */}
+                        <div className="bg-white/5 border border-white/10 rounded-2xl overflow-hidden mb-6">
+                            <div className="relative">
+                                <MissionImage
+                                    src={selectedMission.image}
+                                    alt={selectedMission.name}
+                                    color={selectedMission.color}
+                                    size="lg"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#050508] via-transparent to-transparent" />
                                 <div className="absolute bottom-4 left-6 right-6">
                                     <span className={`inline-block px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border ${STATUS_STYLES[selectedMission.status] || 'bg-white/10 text-white/50 border-white/10'}`}>
                                         {selectedMission.status}
                                     </span>
-                                    <h2 className="text-2xl sm:text-3xl font-black text-white mt-2">{selectedMission.name}</h2>
-                                    <div className="flex items-center gap-3 mt-1 text-sm text-white/60">
-                                        <span style={{ color: AGENCY_COLORS[selectedMission.agency] || '#ffffff' }} className="font-bold">{selectedMission.agency}</span>
-                                        <span>•</span>
-                                        <span className="flex items-center gap-1"><Calendar size={12} /> {selectedMission.launch}</span>
-                                        <span>•</span>
-                                        <span className="flex items-center gap-1"><Target size={12} /> {selectedMission.target}</span>
-                                    </div>
+                                    <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mt-2">{selectedMission.name}</h2>
+                                    <p className="text-white/60 mt-2 max-w-2xl">{selectedMission.description}</p>
                                 </div>
                             </div>
+                        </div>
 
-                            {/* Mission Details */}
-                            <div className="p-6 space-y-6">
-                                <div>
-                                    <h3 className="text-xs font-bold uppercase tracking-widest text-cyan-400 mb-2">Mission Overview</h3>
-                                    <p className="text-white/80 leading-relaxed">{selectedMission.description}</p>
+                        {/* Quick Stats Cards */}
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                                <Building2 size={20} className="mx-auto mb-2" style={{ color: AGENCY_COLORS[selectedMission.agency] }} />
+                                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Agency</p>
+                                <p className="font-bold" style={{ color: AGENCY_COLORS[selectedMission.agency] }}>{selectedMission.agency}</p>
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                                <Calendar size={20} className="mx-auto mb-2 text-cyan-400" />
+                                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Launch Year</p>
+                                <p className="font-bold text-cyan-400">{selectedMission.launch}</p>
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                                <Target size={20} className="mx-auto mb-2 text-orange-400" />
+                                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Destination</p>
+                                <p className="font-bold text-orange-400">{selectedMission.target}</p>
+                            </div>
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-4 text-center">
+                                <Zap size={20} className="mx-auto mb-2 text-yellow-400" />
+                                <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Status</p>
+                                <p className="font-bold text-yellow-400">{selectedMission.status}</p>
+                            </div>
+                        </div>
+
+                        {/* Two Column Layout */}
+                        <div className="grid lg:grid-cols-3 gap-6">
+                            {/* Main Content Column */}
+                            <div className="lg:col-span-2 space-y-6">
+                                {/* Why This Mission - Motivation */}
+                                {selectedMission.motivation && (
+                                    <div className="bg-gradient-to-br from-blue-500/10 to-indigo-500/5 border border-blue-500/20 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-blue-400 mb-4 flex items-center gap-2">
+                                            🎯 Why This Mission?
+                                        </h3>
+                                        <p className="text-white/80 leading-relaxed">{selectedMission.motivation}</p>
+                                    </div>
+                                )}
+
+                                {/* Historical Context */}
+                                {selectedMission.context && (
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-amber-400 mb-4 flex items-center gap-2">
+                                            📜 Historical Background
+                                        </h3>
+                                        <p className="text-white/70 leading-relaxed">{selectedMission.context}</p>
+                                    </div>
+                                )}
+
+                                {/* Mission Objectives */}
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-cyan-400 mb-4 flex items-center gap-2">
+                                        <Target size={16} /> Mission Objectives
+                                    </h3>
+                                    {selectedMission.scientific_goal && (
+                                        <div className="mb-4">
+                                            <p className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Primary Objective</p>
+                                            <p className="text-white/80 leading-relaxed">{selectedMission.scientific_goal}</p>
+                                        </div>
+                                    )}
+                                    {selectedMission.importance && (
+                                        <div className="border-l-2 border-yellow-500/50 pl-4 py-2 bg-yellow-500/5 rounded-r-lg">
+                                            <p className="text-[10px] uppercase tracking-wider text-yellow-400 mb-1">Historical Significance</p>
+                                            <p className="text-white/70 leading-relaxed italic">{selectedMission.importance}</p>
+                                        </div>
+                                    )}
                                 </div>
 
-                                {selectedMission.scientific_goal && (
-                                    <div>
-                                        <h3 className="text-xs font-bold uppercase tracking-widest text-indigo-400 mb-2">Scientific Objective</h3>
-                                        <p className="text-white/70 leading-relaxed">{selectedMission.scientific_goal}</p>
+                                {/* Mission Outcome */}
+                                {selectedMission.outcome && (
+                                    <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/5 border border-green-500/20 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-green-400 mb-4 flex items-center gap-2">
+                                            ✅ What Happened
+                                        </h3>
+                                        <p className="text-white/80 leading-relaxed">{selectedMission.outcome}</p>
                                     </div>
                                 )}
 
-                                {selectedMission.importance && (
-                                    <div>
-                                        <h3 className="text-xs font-bold uppercase tracking-widest text-yellow-400 mb-2">Historical Significance</h3>
-                                        <p className="text-white/70 leading-relaxed italic">{selectedMission.importance}</p>
+                                {/* Legacy & Long-term Impact */}
+                                {selectedMission.legacy && (
+                                    <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/5 border border-purple-500/20 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-purple-400 mb-4 flex items-center gap-2">
+                                            🌟 Lasting Impact
+                                        </h3>
+                                        <p className="text-white/80 leading-relaxed">{selectedMission.legacy}</p>
                                     </div>
                                 )}
 
-                                <div className="pt-4 border-t border-white/10">
-                                    <a
-                                        href={`https://en.wikipedia.org/wiki/${encodeURIComponent(selectedMission.name.replace(/ /g, '_'))}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm text-white/70 hover:text-white transition-all"
-                                    >
-                                        <ExternalLink size={14} /> Learn More on Wikipedia
-                                    </a>
+                                {/* Key Achievements */}
+                                {selectedMission.achievements && selectedMission.achievements.length > 0 && (
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-green-400 mb-4 flex items-center gap-2">
+                                            <Zap size={16} /> Key Achievements
+                                        </h3>
+                                        <div className="space-y-3">
+                                            {selectedMission.achievements.map((achievement, idx) => (
+                                                <div key={idx} className="flex items-start gap-3 p-3 bg-green-500/5 border border-green-500/10 rounded-lg">
+                                                    <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                                        <span className="text-green-400 text-xs font-bold">{idx + 1}</span>
+                                                    </div>
+                                                    <p className="text-white/80">{achievement}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Fun Facts */}
+                                {selectedMission.funFacts && selectedMission.funFacts.length > 0 && (
+                                    <div className="bg-gradient-to-br from-orange-500/10 to-pink-500/5 border border-orange-500/20 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-orange-400 mb-4 flex items-center gap-2">
+                                            🚀 Did You Know?
+                                        </h3>
+                                        <div className="grid sm:grid-cols-2 gap-3">
+                                            {selectedMission.funFacts.map((fact, idx) => (
+                                                <div key={idx} className="p-3 bg-black/30 rounded-lg border border-white/5">
+                                                    <p className="text-white/70 text-sm">{fact}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Sidebar Column */}
+                            <div className="space-y-6">
+                                {/* Mission Timeline */}
+                                <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-indigo-400 mb-4 flex items-center gap-2">
+                                        <Calendar size={16} /> Timeline
+                                    </h3>
+                                    <div className="relative pl-4 border-l-2 border-indigo-500/30 space-y-4">
+                                        <div className="relative">
+                                            <div className="absolute -left-[21px] w-3 h-3 rounded-full bg-indigo-500 border-2 border-[#050508]" />
+                                            <p className="text-[10px] uppercase tracking-wider text-indigo-400">Launch</p>
+                                            <p className="font-bold text-white">{selectedMission.launch}</p>
+                                        </div>
+                                        <div className="relative">
+                                            <div className="absolute -left-[21px] w-3 h-3 rounded-full bg-cyan-500 border-2 border-[#050508]" />
+                                            <p className="text-[10px] uppercase tracking-wider text-cyan-400">Target Reached</p>
+                                            <p className="font-bold text-white">{selectedMission.target}</p>
+                                        </div>
+                                        <div className="relative">
+                                            <div className={`absolute -left-[21px] w-3 h-3 rounded-full border-2 border-[#050508] ${selectedMission.status === 'Active' ? 'bg-green-500 animate-pulse' : 'bg-white/30'}`} />
+                                            <p className="text-[10px] uppercase tracking-wider text-white/40">Current Status</p>
+                                            <p className={`font-bold ${selectedMission.status === 'Active' ? 'text-green-400' : 'text-white/60'}`}>{selectedMission.status}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Instruments/Technology */}
+                                {selectedMission.instruments && selectedMission.instruments.length > 0 && (
+                                    <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                                        <h3 className="text-sm font-bold uppercase tracking-widest text-purple-400 mb-4 flex items-center gap-2">
+                                            <Zap size={16} /> Onboard Tech
+                                        </h3>
+                                        <div className="space-y-2">
+                                            {selectedMission.instruments.map((instrument, idx) => (
+                                                <div key={idx} className="flex items-center gap-2 p-2 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                                                    <div className="w-2 h-2 rounded-full bg-purple-400" />
+                                                    <span className="text-xs text-purple-200">{instrument}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Quick Facts Card */}
+                                <div className="bg-gradient-to-br from-white/5 to-white/0 border border-white/10 rounded-xl p-6">
+                                    <h3 className="text-sm font-bold uppercase tracking-widest text-white/60 mb-4">Quick Reference</h3>
+                                    <div className="space-y-3 text-sm">
+                                        <div className="flex justify-between">
+                                            <span className="text-white/40">Agency</span>
+                                            <span className="font-bold" style={{ color: AGENCY_COLORS[selectedMission.agency] }}>{selectedMission.agency}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-white/40">Launch</span>
+                                            <span className="font-bold text-white">{selectedMission.launch}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-white/40">Target</span>
+                                            <span className="font-bold text-white">{selectedMission.target}</span>
+                                        </div>
+                                        <div className="flex justify-between">
+                                            <span className="text-white/40">Status</span>
+                                            <span className={`font-bold ${selectedMission.status === 'Active' ? 'text-green-400' : selectedMission.status === 'Historic' ? 'text-yellow-400' : 'text-cyan-400'}`}>
+                                                {selectedMission.status}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -250,15 +475,13 @@ export default function MissionsPage({ onClose }) {
                                                 onClick={() => setSelectedMission(mission)}
                                                 className="group text-left p-4 bg-white/5 hover:bg-white/10 border border-white/5 hover:border-white/20 rounded-xl transition-all duration-300"
                                             >
-                                                {/* Mini Image Placeholder */}
-                                                <div
-                                                    className="h-24 rounded-lg mb-3 flex items-center justify-center relative overflow-hidden"
-                                                    style={{ backgroundColor: mission.color + '15' }}
-                                                >
-                                                    <Rocket
-                                                        size={32}
-                                                        style={{ color: mission.color }}
-                                                        className="opacity-40 group-hover:opacity-60 group-hover:scale-110 transition-all duration-300"
+                                                {/* Mission Image Thumbnail with skeleton */}
+                                                <div className="mb-3 group-hover:scale-[1.02] transition-transform duration-300">
+                                                    <MissionImage
+                                                        src={mission.image}
+                                                        alt={mission.name}
+                                                        color={mission.color}
+                                                        size="sm"
                                                     />
                                                 </div>
 

@@ -15,6 +15,7 @@ A high-fidelity, interactive 3D Solar System simulation built with **React**, **
 - **🪐 High-Fidelity Planets**: Each celestial body features custom shaders and procedural textures (e.g., Jupiter's dynamic flow engine, Saturn's crystalline rings with Cassini Division)
 - **📊 Cinematic HUD**: Sophisticated telemetry overlay with real-time technical data on planetary composition, physics, and orbital dynamics
 - **🔬 Deep Dive Mode**: Interactive exploration panels with scientific data, mission history, satellite registry, and atmospheric composition
+- **🚀 Advanced Mission Database**: Comprehensive historical data for 20+ key missions, including motivation, context, outcomes, and legacy impacts
 - **📱 Fully Responsive**: Optimized for mobile, tablet, laptop, and desktop with adaptive layouts and touch-friendly controls
 - **🎙️ Neural Voice Integration**: Automated AI analysis and audio readouts for planetary data (Gemini API supported)
 
@@ -96,17 +97,17 @@ The Sun uses a fully **procedural canvas-based texture** instead of static image
 ```
 src/
 ├── planets/              # Planet factory modules
-│   ├── Earth.jsx         # NASA-textured with atmosphere layers
-│   ├── Sun.jsx           # Procedural solar texture engine
-│   ├── Mars.jsx          # Olympus Mons heightmap
-│   ├── Jupiter.jsx       # Flow dynamics with Great Red Spot
-│   ├── Saturn.jsx        # Crystalline ring system
-│   └── ...               # Mercury, Venus, Uranus, Neptune, Pluto
 ├── components/
+│   ├── ui/               # Navigation & common UI
 │   ├── overlays/         # Deep Dive panels & HUD layers
 │   └── visuals/          # Spacetime grid, orbital paths
-├── data.js               # Planetary telemetry & mission database
-└── SolarSystemExplorer.jsx  # Main application component
+├── data/
+│   └── missions/         # Modular mission database
+│       ├── lunar/        # Moon exploration history
+│       ├── mars/         # Mars surface missions
+│       └── outer/        # Deep space explorers
+├── data.js               # Planetary telemetry & core configurations
+└── SolarSystemExplorer.jsx  # Main application entry point
 ```
 
 ---
