@@ -19,6 +19,16 @@ A high-fidelity, interactive 3D Solar System simulation built with **React**, **
 - **📱 Fully Responsive**: Optimized for mobile, tablet, laptop, and desktop with adaptive layouts and touch-friendly controls
 - **🎙️ Neural Voice Integration**: Automated AI analysis and audio readouts for planetary data (Gemini API supported)
 
+## 🚀 Potential Use Cases & Educational Value
+
+Solar Core Explorer is designed as both a technical showcase and a powerful educational tool:
+
+- **Interactive Science Classroom**: A visual aid for teaching planetary science, orbital mechanics, and solar physics. The "Deep Dive" mode provides raw data that can be used for classroom assignments.
+- **Museum/Exhibit Display**: Optimized cinematic rendering makes it suitable for public-facing kiosks or educational exhibits.
+- **Physics Visualization**: Real-time telemetry calculations help students visualize gravity, rotational periods, and atmospheric compositions.
+- **Reference Encyclopedia**: The integrated mission database serves as a quick-reference guide for space exploration history.
+- **Open-Source Learning**: For developers, it serves as a robust example of React & Three.js integration, procedural generation, and complex shader logic.
+
 ---
 
 ## 🛠️ Technical Architecture
@@ -181,6 +191,14 @@ The project is configured for **GitHub Pages** via GitHub Actions. Any push to `
 | Planetary Data | NASA Planetary Fact Sheets | Public Domain |
 | Mission Database | NASA Mission Archives | Public Domain |
 | Icons | [Lucide React](https://lucide.dev/) | MIT |
+
+---
+
+## 📜 Code of Conduct
+
+This project adheres to the **Contributor Covenant**. We are committed to providing a friendly, safe, and welcoming environment for all, regardless of level of experience, gender, gender identity and expression, sexual orientation, disability, personal appearance, body size, race, ethnicity, age, religion, or nationality.
+
+Please be kind and respectful in all interactions. Discriminatory or harassing behavior of any kind will not be tolerated.
 
 ---
 
